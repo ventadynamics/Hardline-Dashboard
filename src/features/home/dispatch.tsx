@@ -170,24 +170,24 @@ export async function GameSummaryBlock() {
             />
           );
         })}
-        <div className="tnum mt-4 grid grid-cols-2 gap-px border border-line2 bg-line2">
-          <div className="bg-panel px-3 py-2.5">
+        <div className="tnum grid-seam mt-4 grid-cols-2">
+          <div className="px-3 py-2.5">
             <p className="tech-label">Средний матч</p>
             <p className="mt-1 font-mono text-[14px] font-bold text-ink">
               {durationShort(global.avgMatchDurationSec)}
             </p>
           </div>
-          <div className="bg-panel px-3 py-2.5">
+          <div className="px-3 py-2.5">
             <p className="tech-label">Матчей сегодня</p>
             <p className="mt-1 font-mono text-[14px] font-bold text-ink">{num(global.matchesToday)}</p>
           </div>
-          <div className="bg-panel px-3 py-2.5">
+          <div className="px-3 py-2.5">
             <p className="tech-label">Популярная фракция</p>
             <p className={`tele mt-1 text-[11.5px] font-bold ${factionText[popFaction.colorToken]}`}>
               {popFaction.name}
             </p>
           </div>
-          <div className="bg-panel px-3 py-2.5">
+          <div className="px-3 py-2.5">
             <p className="tech-label">Топ-юнит</p>
             <Link
               href={`/units/${topUnit.id}`}

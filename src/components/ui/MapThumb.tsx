@@ -48,9 +48,9 @@ export function MapThumb({
       aria-label={`Схема карты ${map.name}`}
       preserveAspectRatio="xMidYMid slice"
     >
-      <rect width={W} height={H} fill="var(--surface-2)" />
+      <rect width={W} height={H} fill="#0d1016" />
       {blocks.map((b, i) => (
-        <rect key={i} x={b.x} y={b.y} width={b.w} height={b.h} fill="#9eb2d0" opacity={b.o} />
+        <rect key={i} x={b.x} y={b.y} width={b.w} height={b.h} fill="#d6e4fc" opacity={b.o} />
       ))}
       <line x1="0" y1={roadY} x2={W} y2={roadY} stroke="var(--line-3)" strokeWidth="3" opacity="0.5" />
       <line x1={roadX} y1="0" x2={roadX} y2={H} stroke="var(--line-3)" strokeWidth="2" opacity="0.4" />

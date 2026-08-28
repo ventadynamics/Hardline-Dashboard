@@ -3,13 +3,15 @@ import { cn } from "@/lib/cn";
 import type { ReactNode } from "react";
 
 const variants = {
-  /* mechanical inversion: phosphor fill on hover */
-  primary: "ctrl",
+  /* solid ink fill — the one loud control; red/blue stay light, not fill */
+  primary: "ctrl ctrl--primary",
+  /* hazard edge: red as signal on the border, translucent body */
   danger: "ctrl ctrl--red",
-  ghost: "ctrl !border-line2 !text-dim hover:!border-line3",
+  /* quiet layered control */
+  ghost: "ctrl",
 } as const;
 
-/** Rectangular mono control. Hover inverts, press acknowledges. */
+/** Rectangular mono control on the layer system. Press acknowledges. */
 export function Btn({
   href,
   children,

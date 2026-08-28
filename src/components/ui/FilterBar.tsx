@@ -58,7 +58,7 @@ export function FilterBar({ fields }: { fields: FilterField[] }) {
                   const v = e.target.value;
                   debounce.current = setTimeout(() => apply(f.name, v), 350);
                 }}
-                className="w-full border border-line2 bg-bg1 py-[7px] pl-8 pr-2.5 text-[13px] text-ink outline-none transition-colors placeholder:text-faint focus:border-[rgba(67,144,255,0.6)]"
+                className="w-full rounded-sm border border-line2 bg-[color:var(--layer-1)] py-[7px] pl-8 pr-2.5 text-[13px] text-ink outline-none transition-colors placeholder:text-faint focus:border-[rgba(76,154,255,0.6)]"
               />
             </span>
           </label>
@@ -68,7 +68,7 @@ export function FilterBar({ fields }: { fields: FilterField[] }) {
             <select
               value={params.get(f.name) ?? ""}
               onChange={(e) => apply(f.name, e.target.value)}
-              className="min-w-[136px] cursor-pointer border border-line2 bg-bg1 px-2.5 py-[7px] text-[13px] text-ink outline-none transition-colors focus:border-[rgba(67,144,255,0.6)]"
+              className="min-w-[136px] cursor-pointer rounded-sm border border-line2 bg-[color:var(--layer-1)] px-2.5 py-[7px] text-[13px] text-ink outline-none transition-colors focus:border-[rgba(76,154,255,0.6)]"
             >
               {(f.options ?? []).map((o) => (
                 <option key={o.value} value={o.value} className="bg-bg1 text-ink">

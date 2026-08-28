@@ -77,7 +77,7 @@ async function TeamScoreboard({
           </div>
           <div className="flex items-center gap-3">
             {won && (
-              <span className="display border border-[rgba(92,194,129,0.35)] px-1.5 py-[2px] text-[10.5px] font-semibold tracking-wider text-success">
+              <span className="tele rounded-sm border border-[rgba(232,238,247,0.35)] bg-[rgba(232,238,247,0.07)] px-1.5 py-[2px] text-[10px] font-bold text-success">
                 ПОБЕДИТЕЛЬ
               </span>
             )}
@@ -123,7 +123,7 @@ function UnitUsageTable({ team, units, faction }: { team: MatchTeam; units: Unit
   const unit = (id: string) => units.find((u) => u.id === id);
   return (
     <div className="frame">
-      <header className="flex items-center justify-between border-b border-[rgba(0,0,0,0.45)] bg-raised px-3.5 py-2">
+      <header className="flex items-center justify-between border-b border-line2 bg-[color:var(--layer-1)] px-3.5 py-2">
         <FactionTag faction={faction} />
         <span className="tech-label">состав и потери</span>
       </header>
@@ -181,12 +181,12 @@ export async function MatchReport({ matchId }: { matchId: string }) {
     <div className="mx-auto max-w-[1400px] space-y-10 px-4 py-8 sm:px-6">
       {/* report head */}
       <section className="frame">
-        <div className="relative overflow-hidden">
-          <div className="scanlines pointer-events-none absolute inset-0" aria-hidden />
+        <div className="relative">
+          <div className="hero-light" aria-hidden />
           <div className="relative grid grid-cols-1 items-center gap-6 p-5 lg:grid-cols-[1.1fr_auto_1fr] lg:gap-10">
             <div>
               <p className="tech-label">Матч-репорт · {dateTime(match.startedAt)}</p>
-              <h1 className="display mt-1.5 text-[30px] font-semibold leading-none tracking-[0.06em] text-ink">
+              <h1 className="display mt-1.5 text-[30px] font-semibold leading-none text-ink">
                 {map.name}
               </h1>
               <p className="mt-2 text-[13px] text-dim">
@@ -196,7 +196,7 @@ export async function MatchReport({ matchId }: { matchId: string }) {
             <div className="justify-self-start lg:justify-self-center">
               <div className="flex items-center gap-5">
                 <div className="text-right">
-                  <p className={cn("display text-[15px] font-semibold tracking-wider", factionText[fa.colorToken])}>
+                  <p className={cn("display text-[15px] font-semibold", factionText[fa.colorToken])}>
                     {fa.name}
                   </p>
                   {aWon && <p className="tech-label !text-success">победа</p>}
@@ -207,7 +207,7 @@ export async function MatchReport({ matchId }: { matchId: string }) {
                   {teamB.score}
                 </p>
                 <div>
-                  <p className={cn("display text-[15px] font-semibold tracking-wider", factionText[fb.colorToken])}>
+                  <p className={cn("display text-[15px] font-semibold", factionText[fb.colorToken])}>
                     {fb.name}
                   </p>
                   {bWon && <p className="tech-label !text-success">победа</p>}
@@ -237,11 +237,11 @@ export async function MatchReport({ matchId }: { matchId: string }) {
         <div className="frame">
           <div className="px-4 py-3">
             <div className="mb-1 grid grid-cols-[1fr_150px_1fr] gap-3 sm:grid-cols-[1fr_180px_1fr]">
-              <p className={cn("display text-right text-[12.5px] font-semibold tracking-wider", factionText[fa.colorToken])}>
+              <p className={cn("display text-right text-[12.5px] font-semibold", factionText[fa.colorToken])}>
                 {fa.code}
               </p>
               <span />
-              <p className={cn("display text-[12.5px] font-semibold tracking-wider", factionText[fb.colorToken])}>
+              <p className={cn("display text-[12.5px] font-semibold", factionText[fb.colorToken])}>
                 {fb.code}
               </p>
             </div>

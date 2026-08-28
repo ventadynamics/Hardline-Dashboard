@@ -24,16 +24,16 @@ const COLS: { title: string; links: { href: string; label: string }[] }[] = [
 
 export function SiteFooter() {
   return (
-    <footer className="mt-16 border-t-2 border-inkline bg-bg1">
+    <footer className="mt-16 border-t border-line2 bg-bg1">
       <div className="mx-auto max-w-[1360px] px-4 py-10 sm:px-6">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-[1.4fr_1fr_1fr_1.2fr]">
           <div>
             <div className="flex items-center gap-2.5">
               <span aria-hidden className="flex h-[16px] items-end gap-[3px]">
-                <span className="h-full w-[4px] bg-blue" />
-                <span className="h-[10px] w-[4px] bg-red" />
+                <span className="h-full w-[4px] rounded-[1px] bg-blue shadow-[0_0_8px_rgba(76,154,255,0.55)]" />
+                <span className="h-[10px] w-[4px] rounded-[1px] bg-red shadow-[0_0_8px_rgba(255,59,48,0.55)]" />
               </span>
-              <span className="display text-[17px] font-bold tracking-[0.18em] text-ink">HARDLINE</span>
+              <span className="display text-[17px] font-bold text-ink">HARDLINE</span>
             </div>
             <p className="mt-3 max-w-[300px] text-[13px] leading-relaxed text-dim">
               Оперативный портал тактической RTS Hardline: статистика, рейтинги,
@@ -68,12 +68,7 @@ export function SiteFooter() {
           <p className="font-mono text-[11px] text-faint">
             © 2026 HARDLINE. Прототип companion-портала — все данные тестовые.
           </p>
-          <div className="flex items-center gap-4">
-            <span className="barcode h-[16px] w-[92px] opacity-40" aria-hidden />
-            <p className="font-mono text-[10.5px] uppercase tracking-wider text-faint">
-              build 0.1.0 / mock data / api-ready
-            </p>
-          </div>
+          <p className="tele text-[10.5px] text-faint">build 0.1.0 / mock data / api-ready</p>
         </div>
       </div>
     </footer>

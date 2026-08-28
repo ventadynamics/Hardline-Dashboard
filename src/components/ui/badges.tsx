@@ -28,21 +28,25 @@ export function FactionTag({
 }) {
   return (
     <span className={cn("inline-flex items-center gap-1.5 whitespace-nowrap", className)}>
-      <span className={cn("inline-block h-[9px] w-[9px]", factionBg[faction.colorToken])} aria-hidden />
+      <span
+        className={cn("inline-block size-[8px] rounded-[2px]", factionBg[faction.colorToken])}
+        aria-hidden
+      />
       <span className="tele text-[11.5px] font-bold text-ink">{full ? faction.name : faction.code}</span>
     </span>
   );
 }
 
+/** Result chip: translucent tinted layer, red reserved for the loss light. */
 export function ResultBadge({ result }: { result: "win" | "loss" | "draw" }) {
   const text = result === "win" ? "ПОБЕДА" : result === "loss" ? "ПОРАЖЕНИЕ" : "НИЧЬЯ";
   return (
     <span
       className={cn(
-        "tele inline-block border px-1.5 py-[3px] text-[10px] font-bold leading-none",
-        result === "win" && "border-ink text-ink",
-        result === "loss" && "border-[color:var(--red)] text-[color:var(--red)]",
-        result === "draw" && "border-line3 text-dim",
+        "tele inline-block rounded-sm border px-1.5 py-[3px] text-[10px] font-bold leading-none",
+        result === "win" && "border-[rgba(232,238,247,0.35)] bg-[rgba(232,238,247,0.07)] text-ink",
+        result === "loss" && "border-[rgba(255,59,48,0.45)] bg-[rgba(255,59,48,0.08)] text-red",
+        result === "draw" && "border-line3 bg-[color:var(--layer-1)] text-dim",
       )}
     >
       {text}

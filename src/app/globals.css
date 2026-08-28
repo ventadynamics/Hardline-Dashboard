@@ -1,47 +1,58 @@
 @import "tailwindcss";
 
 /* ------------------------------------------------------------------ */
-/* HARDLINE — Tactical Telemetry design system.                        */
-/* Industrial brutalism: deactivated-CRT substrate, phosphor ink,      */
-/* hazard-red structure, police-blue as data semantics only. 90deg     */
-/* geometry, visible compartments, mono telemetry, macro display type. */
-/* No gradients-as-decoration, no soft shadows, no glassmorphism.      */
+/* HARDLINE — Night Dispatch design system.                            */
+/* Per the owner's brief: dark layered surfaces, translucency as       */
+/* interface layers, red/blue as LIGHT (never button fill), 0–6px     */
+/* rectangular shapes, restrained cinematic effects, disciplined      */
+/* technical graphics. Battlelog density, modern tactical web UI.     */
 /* ------------------------------------------------------------------ */
 
 :root {
-  /* substrate */
-  --bg-0: #0b0c0d;
-  --bg-1: #0e0f11;
-  --surface-1: #101214;
-  --surface-2: #16181b;
+  /* substrate: night asphalt with a cold cast */
+  --bg-0: #090b0f;
+  --bg-1: #0c0f14;
 
-  /* structure */
-  --line-1: #212427;
-  --line-2: #2e3236;
-  --line-3: #43484d;
-  --ink-line: #caccce;
+  /* translucent interface layers over the substrate */
+  --layer-1: rgba(214, 228, 252, 0.03);
+  --layer-2: rgba(214, 228, 252, 0.06);
+  --layer-3: rgba(214, 228, 252, 0.1);
 
-  /* phosphor text */
-  --text-1: #ececea;
-  --text-2: #9a9d9f;
-  --text-3: #5e6265;
+  /* hairlines */
+  --line-1: rgba(214, 228, 252, 0.07);
+  --line-2: rgba(214, 228, 252, 0.11);
+  --line-3: rgba(214, 228, 252, 0.22);
+  --ink-line: rgba(232, 238, 247, 0.85);
 
-  /* accents */
-  --red: #ff2a2a;          /* hazard: structure, alerts, strikes */
+  /* text */
+  --text-1: #e9edf4;
+  --text-2: #9aa4b2;
+  --text-3: #626c7b;
+
+  /* light accents: red = hazard/alarm light, blue = police/data light */
+  --red: #ff3b30;
   --red-deep: #8f1414;
-  --blue: #3d8bff;         /* police / data semantics only */
-  --blue-bright: #74acff;
-  --olive: #97a578;        /* third-faction data */
-  --term-green: #4af626;   /* reserved: live indicator ONLY */
+  --blue: #4c9aff;
+  --blue-bright: #85bbff;
+  --olive: #9aa87c;
+  --term-green: #3ce07a; /* reserved: live indicator ONLY */
   --gold: #d2a355;
+
+  /* colored light washes (the one sanctioned use of gradients) */
+  --wash-red: rgba(255, 59, 48, 0.07);
+  --wash-blue: rgba(76, 154, 255, 0.08);
 
   /* faction slots — provisional, changed centrally, never in components */
   --faction-blue: var(--blue);
   --faction-red: var(--red);
   --faction-olive: var(--olive);
 
-  /* geometry: 90 degrees only */
-  --radius-0: 0px;
+  /* geometry: rectangular, 0–6px */
+  --radius-1: 3px;
+  --radius-2: 6px;
+
+  /* elevation for floating layers (menus) */
+  --shadow-float: 0 12px 32px rgba(3, 5, 8, 0.55), 0 2px 8px rgba(3, 5, 8, 0.4);
 
   /* motion */
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
@@ -51,8 +62,8 @@
 @theme inline {
   --color-bg0: var(--bg-0);
   --color-bg1: var(--bg-1);
-  --color-panel: var(--surface-1);
-  --color-raised: var(--surface-2);
+  --color-panel: var(--layer-1);
+  --color-raised: var(--layer-2);
   --color-line: var(--line-1);
   --color-line2: var(--line-2);
   --color-line3: var(--line-3);
@@ -72,10 +83,10 @@
   --font-sans: var(--font-body), system-ui, sans-serif;
   --font-display: var(--font-display-face), var(--font-body), sans-serif;
   --font-mono: var(--font-mono-face), ui-monospace, monospace;
-  --radius-sm: 0px;
-  --radius-DEFAULT: 0px;
-  --radius-md: 0px;
-  --radius-lg: 0px;
+  --radius-sm: 3px;
+  --radius-DEFAULT: 4px;
+  --radius-md: 4px;
+  --radius-lg: 6px;
 }
 
 /* ------------------------------------------------------------------ */
@@ -96,16 +107,28 @@ body {
   overflow-x: hidden;
 }
 
+/* ambient city light: one fixed static layer, mounted once in layout */
+.ambient-light {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(52% 38% at 12% -6%, var(--wash-blue), transparent 70%),
+    radial-gradient(44% 34% at 94% 2%, var(--wash-red), transparent 70%),
+    radial-gradient(60% 42% at 50% 108%, rgba(76, 154, 255, 0.04), transparent 72%);
+}
+
 ::selection {
-  background: var(--red);
-  color: #0b0c0d;
+  background: rgba(76, 154, 255, 0.32);
+  color: var(--text-1);
 }
 
 input,
 textarea,
 select {
-  caret-color: var(--red);
-  border-radius: 0;
+  caret-color: var(--blue);
+  border-radius: var(--radius-1);
 }
 
 ::placeholder {
@@ -114,8 +137,9 @@ select {
 }
 
 :focus-visible {
-  outline: 1px solid var(--red);
+  outline: 2px solid var(--blue);
   outline-offset: 2px;
+  border-radius: var(--radius-1);
 }
 
 * {
@@ -128,6 +152,7 @@ select {
 }
 ::-webkit-scrollbar-thumb {
   background: var(--line-3);
+  border-radius: 4px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
@@ -143,9 +168,10 @@ select {
   text-transform: uppercase;
   letter-spacing: 0;
   line-height: 0.95;
+  text-wrap: balance;
 }
 
-/* mono telemetry: ALL metadata, labels, nav, numerals (Martian Mono is wide) */
+/* mono telemetry: metadata, labels, nav, numerals (Martian Mono is wide) */
 .tele {
   font-family: var(--font-mono-face), ui-monospace, monospace;
   text-transform: uppercase;
@@ -154,9 +180,9 @@ select {
 
 .tech-label {
   font-family: var(--font-mono-face), ui-monospace, monospace;
-  font-size: 9.5px;
+  font-size: 10px;
   font-weight: 400;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.07em;
   text-transform: uppercase;
   color: var(--text-3);
 }
@@ -167,35 +193,63 @@ select {
 }
 
 /* ------------------------------------------------------------------ */
-/* Structure: compartments, rules, frames                              */
+/* Structure: layered panels, light rules                              */
 /* ------------------------------------------------------------------ */
 
-/* framed compartment */
+/* translucent interface layer over the substrate */
 .frame {
-  background: var(--surface-1);
+  background: var(--layer-1);
   border: 1px solid var(--line-2);
+  border-radius: var(--radius-2);
+  overflow: hidden;
 }
 
-/* mathematically perfect dividing lines: grid gap over contrast bg */
+/* floating layer: opaque, elevated (menus, popovers) */
+.menu {
+  background: #10141b;
+  border: 1px solid var(--line-2);
+  border-radius: var(--radius-2);
+  box-shadow: var(--shadow-float);
+  overflow: hidden;
+}
+
+/* seamed grid of cells inside one layer */
 .grid-seam {
   display: grid;
   gap: 1px;
   background: var(--line-2);
   border: 1px solid var(--line-2);
+  border-radius: var(--radius-2);
+  overflow: hidden;
 }
 .grid-seam > * {
-  background: var(--surface-1);
+  background: #0d1016;
 }
 
-/* full-width structural rules */
+/* section rules: thin lines of light, not print bars */
 .rule-ink {
-  border-top: 2px solid var(--ink-line);
+  border-top: 1px solid var(--line-3);
 }
 .rule-red {
-  border-top: 2px solid var(--red);
+  border-top: 1px solid rgba(255, 59, 48, 0.55);
+  box-shadow: 0 0 12px rgba(255, 59, 48, 0.18);
+}
+.rule-blue {
+  border-top: 1px solid rgba(76, 154, 255, 0.55);
+  box-shadow: 0 0 12px rgba(76, 154, 255, 0.18);
 }
 
-/* hazard warning stripes */
+/* hero light: red/blue washes on an identity surface (overlay layer) */
+.hero-light {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(46% 90% at 0% 0%, rgba(76, 154, 255, 0.1), transparent 70%),
+    radial-gradient(42% 86% at 100% 0%, rgba(255, 59, 48, 0.08), transparent 70%);
+}
+
+/* hazard stripes — reserved for error surfaces only */
 .stripes-red {
   background-image: repeating-linear-gradient(
     -45deg,
@@ -203,113 +257,32 @@ select {
     transparent 8px 16px
   );
 }
-.stripes-ink {
-  background-image: repeating-linear-gradient(
-    -45deg,
-    var(--line-2) 0 6px,
-    transparent 6px 12px
-  );
-}
 
-/* barcode: repeating vertical lines */
-.barcode {
-  background-image: repeating-linear-gradient(
-    90deg,
-    var(--text-2) 0 2px,
-    transparent 2px 5px,
-    var(--text-2) 5px 6px,
-    transparent 6px 11px,
-    var(--text-2) 11px 14px,
-    transparent 14px 18px
-  );
-}
-
-/* crosshair at grid intersections */
-.crosshair {
-  position: relative;
-}
-.crosshair::before,
-.crosshair::after {
-  content: "";
-  position: absolute;
-  background: var(--line-3);
-}
-.crosshair::before {
-  width: 11px;
-  height: 1px;
-  left: -6px;
-  top: -1px;
-}
-.crosshair::after {
-  width: 1px;
-  height: 11px;
-  left: -1px;
-  top: -6px;
-}
-
-/* ------------------------------------------------------------------ */
-/* Analog degradation                                                  */
-/* ------------------------------------------------------------------ */
-
-/* CRT scanlines */
-.scanlines {
-  background-image: repeating-linear-gradient(
-    0deg,
-    transparent 0 2px,
-    rgba(0, 0, 0, 0.16) 2px 4px
-  );
-}
-
-/* halftone dot screen for imagery — visible texture, not corrosion */
-.halftone-overlay {
-  background-image: radial-gradient(circle, rgba(6, 7, 8, 0.55) 0.8px, transparent 1.2px);
-  background-size: 3.5px 3.5px;
-  mix-blend-mode: multiply;
-  opacity: 0.8;
-}
-
-/* mechanical noise — one fixed overlay, mounted once in layout */
-.grain-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 80;
-  pointer-events: none;
-  opacity: 0.06;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
-  background-size: 180px 180px;
-  mix-blend-mode: overlay;
-}
-
-/* phosphor glow — the one emissive concession, hero-scale only */
-@keyframes light-drift-a {
-  0% { transform: translate3d(-4%, -2%, 0) scale(1); }
-  50% { transform: translate3d(5%, 3%, 0) scale(1.08); }
-  100% { transform: translate3d(-4%, -2%, 0) scale(1); }
-}
-@keyframes light-drift-b {
-  0% { transform: translate3d(3%, 2%, 0) scale(1.05); }
-  50% { transform: translate3d(-5%, -3%, 0) scale(1); }
-  100% { transform: translate3d(3%, 2%, 0) scale(1.05); }
-}
-.drift-a { animation: light-drift-a 26s var(--ease-io) infinite; }
-.drift-b { animation: light-drift-b 32s var(--ease-io) infinite; }
-
-/* live indicator — the ONLY terminal-green element */
+/* live indicator — the ONLY terminal-green element; a point of light */
 @keyframes live-pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.3; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
 }
 .live-dot {
   width: 7px;
   height: 7px;
+  border-radius: 50%;
   background: var(--term-green);
-  animation: live-pulse 2.2s steps(2, end) infinite;
+  box-shadow: 0 0 8px rgba(60, 224, 122, 0.6);
+  animation: live-pulse 2.2s var(--ease-io) infinite;
 }
 .live-dot--red {
   background: var(--red);
+  box-shadow: 0 0 8px rgba(255, 59, 48, 0.55);
 }
 .live-dot--blue {
   background: var(--blue);
+  box-shadow: 0 0 8px rgba(76, 154, 255, 0.55);
 }
 
 /* ------------------------------------------------------------------ */
@@ -330,8 +303,6 @@ select {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .drift-a,
-  .drift-b,
   .live-dot {
     animation: none;
   }
@@ -343,7 +314,7 @@ select {
 }
 
 /* ------------------------------------------------------------------ */
-/* Data tables: compartmentalized telemetry                            */
+/* Data tables: dense telemetry on one layer                           */
 /* ------------------------------------------------------------------ */
 
 .data-table {
@@ -358,12 +329,13 @@ select {
   text-transform: uppercase;
   color: var(--text-3);
   text-align: left;
-  padding: 7px 10px;
-  border-bottom: 1px solid var(--line-3);
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--line-2);
+  background: var(--layer-1);
   white-space: nowrap;
 }
 .data-table td {
-  padding: 7px 10px;
+  padding: 8px 12px;
   border-bottom: 1px solid var(--line-1);
   font-size: 13px;
   vertical-align: middle;
@@ -372,10 +344,10 @@ select {
   border-bottom: none;
 }
 .data-table tbody tr {
-  transition: background-color 100ms var(--ease-out);
+  transition: background-color 120ms var(--ease-out);
 }
 .data-table tbody tr:hover {
-  background: var(--surface-2);
+  background: var(--layer-2);
 }
 .data-table .num {
   text-align: right;
@@ -393,44 +365,65 @@ select {
 /* Controls                                                            */
 /* ------------------------------------------------------------------ */
 
-/* mechanical inversion on hover; press acknowledges instantly */
+/* quiet layered control; press acknowledges instantly */
 .ctrl {
   font-family: var(--font-mono-face), ui-monospace, monospace;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  border: 1px solid var(--line-3);
+  border: 1px solid var(--line-2);
+  border-radius: var(--radius-1);
   color: var(--text-1);
-  background: transparent;
-  transition: background-color 120ms var(--ease-out), color 120ms var(--ease-out),
-    border-color 120ms var(--ease-out), transform 120ms var(--ease-out);
+  background: var(--layer-1);
+  transition:
+    background-color 140ms var(--ease-out),
+    color 140ms var(--ease-out),
+    border-color 140ms var(--ease-out),
+    transform 140ms var(--ease-out);
 }
 .ctrl:hover {
+  background: var(--layer-2);
+  border-color: var(--line-3);
+}
+.ctrl:active {
+  transform: scale(0.98);
+}
+
+/* solid primary — neutral ink fill; red/blue stay light, never a fill */
+.ctrl--primary {
   background: var(--text-1);
   border-color: var(--text-1);
   color: var(--bg-0);
 }
-.ctrl:active {
-  transform: scale(0.97);
+.ctrl--primary:hover {
+  background: #ffffff;
+  border-color: #ffffff;
+  color: var(--bg-0);
 }
+
+/* hazard control: red as signal on the edge, not as fill */
 .ctrl--red {
-  border-color: var(--red);
+  border-color: rgba(255, 59, 48, 0.5);
   color: var(--red);
+  background: rgba(255, 59, 48, 0.06);
 }
 .ctrl--red:hover {
-  background: var(--red);
+  background: rgba(255, 59, 48, 0.12);
   border-color: var(--red);
-  color: #fff;
+  color: #ff6b62;
 }
 
 .pressable {
-  transition: transform 120ms var(--ease-out), background-color 120ms var(--ease-out),
-    border-color 120ms var(--ease-out), color 120ms var(--ease-out);
+  transition:
+    transform 140ms var(--ease-out),
+    background-color 140ms var(--ease-out),
+    border-color 140ms var(--ease-out),
+    color 140ms var(--ease-out);
 }
 .pressable:active {
-  transform: scale(0.97);
+  transform: scale(0.98);
 }
 
-/* nav item: red strike-through active state */
+/* nav item: red light strike for the active section */
 .nav-item {
   position: relative;
 }
@@ -439,9 +432,10 @@ select {
   position: absolute;
   left: 10px;
   right: 10px;
-  bottom: 6px;
+  bottom: 0;
   height: 2px;
   background: var(--red);
+  box-shadow: 0 0 8px rgba(255, 59, 48, 0.5);
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 160ms var(--ease-out);

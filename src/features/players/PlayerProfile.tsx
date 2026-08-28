@@ -14,7 +14,7 @@ import type { SliceStat } from "@/types";
 
 function StatCell({ label, value, accent }: { label: string; value: string; accent?: boolean }) {
   return (
-    <div className="bg-panel px-4 py-3.5">
+    <div className="px-4 py-3.5">
       <p className="tech-label">{label}</p>
       <p className={cn("tnum display mt-1.5 text-[27px] font-semibold leading-none", accent ? "text-bluebright" : "text-ink")}>
         {value}
@@ -37,7 +37,7 @@ async function SliceTable({ title, slices, kind }: { title: string; slices: Slic
         : modes.find((m) => m.id === id)?.name ?? id;
   return (
     <div className="frame">
-      <p className="tech-label border-b border-[rgba(0,0,0,0.45)] bg-raised px-3.5 py-2.5">{title}</p>
+      <p className="tech-label border-b border-line2 bg-[color:var(--layer-1)] px-3.5 py-2.5">{title}</p>
       {slices.length === 0 ? (
         <p className="px-3.5 py-4 text-[12.5px] text-faint">Нет матчей за период.</p>
       ) : (
@@ -89,14 +89,14 @@ export async function PlayerProfile({ playerId, isSelf = false }: { playerId: st
   return (
     <div className="mx-auto max-w-[1360px] space-y-10 px-4 py-8 sm:px-6">
       {/* identity strip */}
-      <section className="frame relative overflow-hidden">
-        <div className="scanlines pointer-events-none absolute inset-0" aria-hidden />
+      <section className="frame relative">
+        <div className="hero-light" aria-hidden />
         <div className="relative flex flex-col gap-6 p-5 sm:p-6 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex items-center gap-5">
             <Avatar seed={player.id} tone={faction.colorToken} size={72} />
             <div>
               <div className="flex flex-wrap items-baseline gap-2.5">
-                <h1 className="display text-[30px] font-semibold leading-none tracking-[0.06em] text-ink">
+                <h1 className="display text-[30px] font-semibold leading-none text-ink">
                   {player.username}
                 </h1>
                 {clanEntry ? (
@@ -105,7 +105,7 @@ export async function PlayerProfile({ playerId, isSelf = false }: { playerId: st
                   </Link>
                 ) : null}
                 {isSelf ? (
-                  <span className="display border border-[rgba(67,144,255,0.4)] px-1.5 py-[3px] text-[10.5px] font-semibold tracking-wider text-bluebright">
+                  <span className="tele rounded-sm border border-[rgba(76,154,255,0.45)] bg-[rgba(76,154,255,0.1)] px-1.5 py-[3px] text-[10px] font-bold text-bluebright">
                     ЭТО ВЫ
                   </span>
                 ) : null}
@@ -195,27 +195,27 @@ export async function PlayerProfile({ playerId, isSelf = false }: { playerId: st
           <StatCell label="Точек захвачено" value={num(stats.objectivesCaptured)} />
         </div>
         <div className="grid-seam mt-2 grid grid-cols-1 sm:grid-cols-3">
-          <div className="bg-panel px-4 py-3.5">
+          <div className="px-4 py-3.5">
             <p className="tech-label">Любимый юнит</p>
             {favUnit ? (
-              <Link href={`/units/${favUnit.id}`} className="display mt-1.5 inline-block text-[15px] font-semibold tracking-wider text-ink transition-colors hover:text-bluebright">
+              <Link href={`/units/${favUnit.id}`} className="display mt-1.5 inline-block text-[15px] font-semibold text-ink transition-colors hover:text-bluebright">
                 {favUnit.name}
               </Link>
             ) : (
               <p className="mt-1.5 text-dim">—</p>
             )}
           </div>
-          <div className="bg-panel px-4 py-3.5">
+          <div className="px-4 py-3.5">
             <p className="tech-label">Любимая карта</p>
             {favMap ? (
-              <Link href={`/maps/${favMap.id}`} className="display mt-1.5 inline-block text-[15px] font-semibold tracking-wider text-ink transition-colors hover:text-bluebright">
+              <Link href={`/maps/${favMap.id}`} className="display mt-1.5 inline-block text-[15px] font-semibold text-ink transition-colors hover:text-bluebright">
                 {favMap.name}
               </Link>
             ) : (
               <p className="mt-1.5 text-dim">—</p>
             )}
           </div>
-          <div className="bg-panel px-4 py-3.5">
+          <div className="px-4 py-3.5">
             <p className="tech-label">Основная фракция</p>
             <p className="mt-1.5">
               <FactionTag faction={factions.find((f) => f.id === stats.favoriteFactionId) ?? faction} full />

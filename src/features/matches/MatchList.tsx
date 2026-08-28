@@ -44,7 +44,7 @@ export async function MatchList({
           <li
             key={m.id}
             className={cn(
-              "relative grid grid-cols-[1fr_auto] items-center gap-x-4 px-3.5 py-[9px] transition-colors hover:bg-[rgba(158,178,208,0.04)] sm:grid-cols-[minmax(140px,1.1fr)_minmax(210px,1.4fr)_64px_92px_auto]",
+              "relative grid grid-cols-[1fr_auto] items-center gap-x-4 px-3.5 py-[9px] transition-colors hover:bg-[color:var(--layer-1)] sm:grid-cols-[minmax(140px,1.1fr)_minmax(210px,1.4fr)_64px_92px_auto]",
               i > 0 && "border-t border-line",
             )}
           >

@@ -50,7 +50,7 @@ export async function PlayerTable({
             const tag = clanTag(e.player.clanId);
             const isMe = e.player.id === highlightPlayerId;
             return (
-              <tr key={e.player.id} className={cn("relative", isMe && "bg-[rgba(67,144,255,0.06)]")}>
+              <tr key={e.player.id} className={cn("relative", isMe && "bg-[rgba(76,154,255,0.07)]")}>
                 <td className="num font-mono text-[12px] text-faint">{e.rank}</td>
                 <td>
                   <div className="flex items-center gap-2.5">

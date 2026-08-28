@@ -33,8 +33,8 @@ function Wordmark() {
   return (
     <Link href="/" className="flex items-baseline gap-2" aria-label="HARDLINE — на главную">
       <span aria-hidden className="flex h-[15px] items-end gap-[3px] self-center">
-        <span className="h-full w-[4px] bg-blue" />
-        <span className="h-[10px] w-[4px] bg-red" />
+        <span className="h-full w-[4px] rounded-[1px] bg-blue shadow-[0_0_8px_rgba(76,154,255,0.55)]" />
+        <span className="h-[10px] w-[4px] rounded-[1px] bg-red shadow-[0_0_8px_rgba(255,59,48,0.55)]" />
       </span>
       <span className="display text-[17px] font-black leading-none text-ink">HARDLINE</span>
       <span aria-hidden className="font-mono text-[10px] text-faint">®</span>
@@ -69,7 +69,10 @@ export function HeaderNav({ user }: { user: HeaderUser }) {
   const unread = user.notifications.filter((n) => n.unread).length;
 
   return (
-    <header className="sticky top-0 z-50 border-b-2 border-inkline bg-bg0" ref={rootRef}>
+    <header
+      className="sticky top-0 z-50 border-b border-line2 bg-[rgba(9,11,15,0.82)] backdrop-blur-md"
+      ref={rootRef}
+    >
       <div className="mx-auto flex h-[54px] max-w-[1400px] items-center gap-6 px-4 sm:px-6">
         <Wordmark />
 
@@ -98,18 +101,21 @@ export function HeaderNav({ user }: { user: HeaderUser }) {
             <button
               type="button"
               onClick={() => setMenu(menu === "bell" ? "none" : "bell")}
-              className="pressable relative flex h-8 w-8 items-center justify-center border border-transparent text-dim transition-colors hover:border-line2 hover:text-ink"
+              className="pressable relative flex size-8 items-center justify-center rounded-sm border border-transparent text-dim transition-colors hover:border-line2 hover:bg-[color:var(--layer-1)] hover:text-ink"
               aria-label={`Уведомления${unread ? `, непрочитанных: ${unread}` : ""}`}
               aria-expanded={menu === "bell"}
             >
               <Bell size={14} strokeWidth={1.75} />
               {unread > 0 && (
-                <span className="absolute right-[5px] top-[5px] h-[6px] w-[6px] bg-red" aria-hidden />
+                <span
+                className="absolute right-[5px] top-[5px] size-[6px] rounded-full bg-red shadow-[0_0_6px_rgba(255,59,48,0.6)]"
+                aria-hidden
+              />
               )}
             </button>
             {menu === "bell" && (
-              <div className="frame absolute right-0 top-[calc(100%+13px)] w-[320px] shadow-none">
-                <div className="flex items-center justify-between border-b border-line2 bg-raised px-3.5 py-2.5">
+              <div className="menu absolute right-0 top-[calc(100%+13px)] w-[320px]">
+                <div className="flex items-center justify-between border-b border-line2 bg-[color:var(--layer-1)] px-3.5 py-2.5">
                   <span className="tech-label">Уведомления</span>
                   <span className="tnum font-mono text-[10.5px] text-faint">{unread} новых</span>
                 </div>
@@ -136,7 +142,7 @@ export function HeaderNav({ user }: { user: HeaderUser }) {
             <button
               type="button"
               onClick={() => setMenu(menu === "account" ? "none" : "account")}
-              className="flex items-center gap-2.5 border border-transparent py-1 pl-1.5 pr-2 transition-colors hover:border-line2"
+              className="flex items-center gap-2.5 rounded-sm border border-transparent py-1 pl-1.5 pr-2 transition-colors hover:border-line2 hover:bg-[color:var(--layer-1)]"
               aria-expanded={menu === "account"}
               aria-label="Меню аккаунта"
             >
@@ -162,7 +168,7 @@ export function HeaderNav({ user }: { user: HeaderUser }) {
               <ChevronDown size={12} className="hidden text-faint sm:block" />
             </button>
             {menu === "account" && (
-              <div className="frame absolute right-0 top-[calc(100%+13px)] w-[210px]">
+              <div className="menu absolute right-0 top-[calc(100%+13px)] w-[210px]">
                 <Link href="/profile" className="flex items-center gap-2.5 px-3.5 py-2.5 text-[12.5px] text-ink transition-colors hover:bg-raised">
                   <UserRound size={13} strokeWidth={1.75} className="text-dim" /> Мой профиль
                 </Link>
@@ -185,7 +191,7 @@ export function HeaderNav({ user }: { user: HeaderUser }) {
           {/* mobile burger */}
           <button
             type="button"
-            className="flex h-8 w-8 items-center justify-center border border-transparent text-dim hover:border-line2 hover:text-ink lg:hidden"
+            className="flex size-8 items-center justify-center rounded-sm border border-transparent text-dim hover:border-line2 hover:text-ink lg:hidden"
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-label={mobileOpen ? "Закрыть меню" : "Открыть меню"}
             aria-expanded={mobileOpen}
@@ -196,7 +202,7 @@ export function HeaderNav({ user }: { user: HeaderUser }) {
       </div>
 
       {mobileOpen && (
-        <nav className="border-t border-line2 bg-bg0 lg:hidden" aria-label="Мобильная навигация">
+        <nav className="border-t border-line2 bg-[rgba(9,11,15,0.94)] lg:hidden" aria-label="Мобильная навигация">
           {NAV.map((item) => (
             <Link
               key={item.href}

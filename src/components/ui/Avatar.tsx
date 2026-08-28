@@ -36,7 +36,11 @@ export function Avatar({
       role="img"
       aria-hidden
       className={className}
-      style={{ background: "var(--surface-2)", border: "1px solid var(--line-1)" }}
+      style={{
+        background: "var(--layer-2)",
+        border: "1px solid var(--line-2)",
+        borderRadius: "var(--radius-1)",
+      }}
       shapeRendering="crispEdges"
     >
       {cells.map((c, i) => (

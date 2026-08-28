@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Countdown } from "@/components/live/Countdown";
+import { ProgressBar } from "@/components/ui/bars";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { EmptyState } from "@/components/ui/states";
 import { cn } from "@/lib/cn";
@@ -18,6 +19,7 @@ export async function OperationBlock() {
         <EmptyState
           title="Вы не состоите в клане"
           hint="Вступите в клан, чтобы получать ежедневные задачи операции."
+          action={{ href: "/clans", label: "НАЙТИ КЛАН" }}
         />
       </section>
     );
@@ -54,21 +56,20 @@ export async function OperationBlock() {
       <div className="frame">
         <div>
           {op.tasks.map((t, i) => {
-          const share = t.total === 0 ? 0 : Math.min(1, t.progress / t.total);
           const isDone = t.status === "done";
           return (
             <article
               key={t.id}
               className={cn(
-                "grid grid-cols-[14px_1fr_auto] items-center gap-x-3.5 px-4 py-3 transition-colors hover:bg-[rgba(158,178,208,0.035)] sm:grid-cols-[14px_minmax(0,1.4fr)_minmax(120px,180px)_86px]",
+                "grid grid-cols-[14px_1fr_auto] items-center gap-x-3.5 px-4 py-3 transition-colors hover:bg-[color:var(--layer-1)] sm:grid-cols-[14px_minmax(0,1.4fr)_minmax(120px,180px)_86px]",
                 i > 0 && "border-t border-line",
               )}
             >
               <span
                 aria-hidden
                 className={cn(
-                  "h-[10px] w-[10px] border",
-                  isDone ? "border-success bg-[rgba(92,194,129,0.35)]" : "border-line3",
+                  "size-[10px] rounded-sm border",
+                  isDone ? "border-[rgba(232,238,247,0.6)] bg-[rgba(232,238,247,0.28)]" : "border-line3",
                 )}
               />
               <div className="min-w-0">
@@ -80,12 +81,12 @@ export async function OperationBlock() {
                   {t.reward ? <span className="text-dim"> · {t.reward}</span> : null}
                 </p>
               </div>
-              <div className="col-span-full mt-2 h-[3px] w-full bg-[rgba(158,178,208,0.1)] sm:col-span-1 sm:col-start-3 sm:mt-0">
-                <div
-                  className={cn("h-full transition-[width] duration-500", isDone ? "bg-success" : "bg-red")}
-                  style={{ width: `${share * 100}%` }}
-                />
-              </div>
+              <ProgressBar
+                value={t.progress}
+                total={t.total}
+                tone={isDone ? "success" : "red"}
+                className="col-span-full mt-2 sm:col-span-1 sm:col-start-3 sm:mt-0"
+              />
               <p className="tnum col-start-3 row-start-1 text-right font-mono text-[12.5px] sm:col-start-4">
                 <span className={isDone ? "text-success" : "text-ink"}>{t.progress}</span>
                 <span className="text-faint">/{t.total}</span>
