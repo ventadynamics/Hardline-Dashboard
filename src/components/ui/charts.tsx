@@ -91,7 +91,7 @@ export function StepChart({
       viewBox={`0 0 ${W} ${H}`}
       role="img"
       aria-label={ariaLabel}
-      className={cn("w-full", className)}
+      className={cn("chart-draw w-full", className)}
       preserveAspectRatio="none"
     >
       {bands.map((v, i) => (
@@ -183,6 +183,8 @@ export function ActivityBars({
         return (
           <g key={i}>
             <rect
+              className="bar-in"
+              style={{ ["--bar-i" as string]: i }}
               x={i * bw + bw * 0.3}
               y={H - padB - h}
               width={bw * 0.4}

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Avatar } from "@/components/ui/Avatar";
+import { Reveal } from "@/components/ui/Reveal";
 import { FactionTag } from "@/components/ui/badges";
 import { MapThumb } from "@/components/ui/MapThumb";
 import { SectionHeader } from "@/components/ui/SectionHeader";
@@ -297,7 +298,7 @@ export async function MatchReport({ matchId }: { matchId: string }) {
       <div className="mx-auto mt-12 max-w-[1400px] space-y-12 px-4 sm:px-6">
         {/* MVP lower-third */}
         {mvp ? (
-          <section aria-label="Лучший игрок матча" className="plate rail-amber relative">
+          <Reveal><section aria-label="Лучший игрок матча" className="plate rail-amber relative">
             <Link
               href={`/players/${mvp.playerId}`}
               className="flex flex-wrap items-center gap-x-6 gap-y-3 px-5 py-4 transition-colors hover:bg-[color:var(--layer-2)]"
@@ -324,22 +325,22 @@ export async function MatchReport({ matchId }: { matchId: string }) {
                 </span>
               </span>
             </Link>
-          </section>
+          </section></Reveal>
         ) : null}
 
         {/* team sheets */}
-        <section aria-label="Составы и счёт">
+        <Reveal><section aria-label="Составы и счёт">
           <SectionHeader title="Составы" />
           <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
             <TeamSheet side={l} flank="l" clanName={clanName(l.team.clanId)} />
             <TeamSheet side={r} flank="r" clanName={clanName(r.team.clanId)} />
           </div>
-        </section>
+        </section></Reveal>
 
         {/* RTS butterfly */}
-        <section aria-label="Потери и развёртывание">
+        <Reveal><section aria-label="Потери и развёртывание">
           <SectionHeader title="Потери и развёртывание" accent="red" />
-          <div className="plate px-4 py-4">
+          <div className="plate stagger px-4 py-4">
             <div className="mb-2 grid grid-cols-[1fr_150px_1fr] gap-3 sm:grid-cols-[1fr_180px_1fr]">
               <p className={cn("tele text-right text-[11px] font-bold", factionTextHi[l.faction.colorToken])}>
                 {l.faction.code}
@@ -361,22 +362,22 @@ export async function MatchReport({ matchId }: { matchId: string }) {
               />
             ))}
           </div>
-        </section>
+        </section></Reveal>
 
         {/* unit usage */}
-        <section aria-label="Юниты сторон">
+        <Reveal><section aria-label="Юниты сторон">
           <SectionHeader title="Юниты сторон" />
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
             <UnitUsageTable side={l} units={units} />
             <UnitUsageTable side={r} units={units} />
           </div>
-        </section>
+        </section></Reveal>
 
         {/* objective log */}
-        <section aria-label="Хроника матча">
+        <Reveal><section aria-label="Хроника матча">
           <SectionHeader title="Хроника" accent="blue" />
           <div className="plate">
-            <ol>
+            <ol className="stagger">
               {match.timeline.map((e, i) => {
                 const f = factions.find((x) => x.id === e.factionId)!;
                 return (
@@ -399,7 +400,7 @@ export async function MatchReport({ matchId }: { matchId: string }) {
               })}
             </ol>
           </div>
-        </section>
+        </section></Reveal>
       </div>
     </div>
   );

@@ -139,7 +139,7 @@ export function SeamShareBar({
         style={{ width: `calc(${(1 - share) * 100}% - 1px)`, background: bColor }}
       />
       <div
-        className="absolute inset-y-[-2px] w-[2px] -skew-x-[12deg] bg-ink"
+        className="seam-junction absolute inset-y-[-2px] w-[2px] -skew-x-[12deg] bg-ink"
         style={{ left: `calc(${share * 100}% - 1px)` }}
       />
     </div>

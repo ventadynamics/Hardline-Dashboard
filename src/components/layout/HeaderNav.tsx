@@ -20,6 +20,27 @@ export interface HeaderUser {
   liveMatches: number;
 }
 
+/** Polls the live snapshot; a changed value re-arms the flash animation. */
+function useLiveMatches(initial: number) {
+  const [state, setState] = useState({ value: initial, tick: 0 });
+  useEffect(() => {
+    const id = setInterval(async () => {
+      try {
+        const res = await fetch("/api/live", { cache: "no-store" });
+        if (!res.ok) return;
+        const snap = (await res.json()) as { liveMatches: number };
+        setState((prev) =>
+          snap.liveMatches === prev.value ? prev : { value: snap.liveMatches, tick: prev.tick + 1 },
+        );
+      } catch {
+        /* keep the last value */
+      }
+    }, 8000);
+    return () => clearInterval(id);
+  }, []);
+  return state;
+}
+
 const NAV: { href: string; label: string }[] = [
   { href: "/", label: "СВОДКА" },
   { href: "/players", label: "СОСТАВ" },
@@ -64,6 +85,7 @@ export function HeaderNav({ user }: { user: HeaderUser }) {
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
   const unread = user.notifications.filter((n) => n.unread).length;
+  const live = useLiveMatches(user.liveMatches);
 
   return (
     <header
@@ -100,7 +122,10 @@ export function HeaderNav({ user }: { user: HeaderUser }) {
             <span className="flex items-center gap-1.5">
               <span className="live-dot" aria-hidden />
               <span className="tele text-[10.5px] font-medium text-dim">
-                В ЭФИРЕ · {user.liveMatches}
+                В ЭФИРЕ ·{" "}
+                <span key={live.tick} className={cn("tnum", live.tick > 0 && "count-flash")}>
+                  {live.value}
+                </span>
               </span>
             </span>
           </div>

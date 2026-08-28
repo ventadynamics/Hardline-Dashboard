@@ -380,7 +380,7 @@ select {
 .ticker-track {
   display: inline-flex;
   white-space: nowrap;
-  animation: ticker-run 60s linear infinite;
+  animation: ticker-run 36s linear infinite;
   will-change: transform;
 }
 .ticker-viewport:hover .ticker-track {
@@ -393,7 +393,7 @@ select {
 
 .reveal {
   opacity: 0;
-  transform: translateY(8px);
+  transform: translateY(18px);
   transition:
     opacity var(--dur-cine) var(--ease-out),
     transform var(--dur-cine) var(--ease-out);
@@ -402,6 +402,72 @@ select {
 .reveal[data-shown="true"] {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* cascading rows inside a revealed section */
+@keyframes stagger-rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.reveal[data-shown="true"] .stagger > * {
+  animation: stagger-rise 380ms var(--ease-out) both;
+}
+.reveal[data-shown="true"] .stagger > *:nth-child(1) { animation-delay: 40ms; }
+.reveal[data-shown="true"] .stagger > *:nth-child(2) { animation-delay: 90ms; }
+.reveal[data-shown="true"] .stagger > *:nth-child(3) { animation-delay: 140ms; }
+.reveal[data-shown="true"] .stagger > *:nth-child(4) { animation-delay: 190ms; }
+.reveal[data-shown="true"] .stagger > *:nth-child(5) { animation-delay: 240ms; }
+.reveal[data-shown="true"] .stagger > *:nth-child(6) { animation-delay: 290ms; }
+.reveal[data-shown="true"] .stagger > *:nth-child(7) { animation-delay: 340ms; }
+.reveal[data-shown="true"] .stagger > *:nth-child(n + 8) { animation-delay: 390ms; }
+
+/* the same cascade driven by signal acquisition (above the fold) */
+[data-acquire="true"] .stagger-acq > * {
+  animation: stagger-rise 380ms var(--ease-out) both;
+}
+[data-acquire="true"] .stagger-acq > *:nth-child(1) { animation-delay: 480ms; }
+[data-acquire="true"] .stagger-acq > *:nth-child(2) { animation-delay: 560ms; }
+[data-acquire="true"] .stagger-acq > *:nth-child(3) { animation-delay: 640ms; }
+
+/* charts draw left to right when their section lands */
+@keyframes chart-draw {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0);
+  }
+}
+.reveal .chart-draw {
+  clip-path: inset(0 100% 0 0);
+}
+.reveal[data-shown="true"] .chart-draw {
+  animation: chart-draw 700ms var(--ease-out) 120ms forwards;
+}
+
+/* activity bars grow from the baseline */
+@keyframes bar-rise {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+.reveal .bar-in {
+  transform: scaleY(0);
+  transform-box: fill-box;
+  transform-origin: bottom;
+}
+.reveal[data-shown="true"] .bar-in {
+  animation: bar-rise 460ms var(--ease-out) both;
+  animation-delay: calc(120ms + var(--bar-i, 0) * 30ms);
 }
 
 /* signal-acquisition wipe for the hero light fields */
@@ -434,6 +500,42 @@ select {
   }
 }
 
+/* the seam junction answers the pointer */
+.seam-junction {
+  transition: box-shadow var(--dur-hover) var(--ease-out);
+}
+@media (hover: hover) and (pointer: fine) {
+  .group:hover .seam-junction {
+    box-shadow: 0 0 10px rgba(237, 242, 250, 0.9);
+  }
+}
+
+/* ghost rank numerals lean in on hover */
+.ghost-num {
+  transition:
+    transform var(--dur-panel) var(--ease-out),
+    opacity var(--dur-panel) var(--ease-out);
+}
+@media (hover: hover) and (pointer: fine) {
+  .group:hover .ghost-num {
+    transform: translateY(-4px);
+    opacity: 0.22;
+  }
+}
+
+/* value flash when a live counter changes */
+@keyframes count-flash {
+  0% {
+    color: var(--police-hi);
+  }
+  100% {
+    color: inherit;
+  }
+}
+.count-flash {
+  animation: count-flash 700ms var(--ease-out) 1;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .live-dot {
     animation: none;
@@ -449,6 +551,27 @@ select {
     transition: opacity 150ms ease;
     transform: none;
     opacity: 1;
+  }
+  .reveal[data-shown="true"] .stagger > * {
+    animation: none;
+  }
+  [data-acquire="true"] .stagger-acq > * {
+    animation: none;
+  }
+  .reveal .chart-draw {
+    clip-path: none;
+  }
+  .reveal[data-shown="true"] .chart-draw {
+    animation: none;
+  }
+  .reveal .bar-in {
+    transform: none;
+  }
+  .reveal[data-shown="true"] .bar-in {
+    animation: none;
+  }
+  .count-flash {
+    animation: none;
   }
 }
 

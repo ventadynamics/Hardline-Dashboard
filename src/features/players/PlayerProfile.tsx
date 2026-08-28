@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Avatar } from "@/components/ui/Avatar";
+import { Reveal } from "@/components/ui/Reveal";
 import { FactionTag } from "@/components/ui/badges";
 import { ActivityBars, StepChart } from "@/components/ui/charts";
 import { Panel } from "@/components/ui/Panel";
@@ -163,7 +164,7 @@ export async function PlayerProfile({
       <div className="mx-auto mt-10 grid max-w-[1400px] grid-cols-1 items-start gap-x-8 gap-y-10 px-4 sm:px-6 lg:grid-cols-[1.4fr_1fr]">
         {/* left: service record */}
         <div className="space-y-10">
-          <section aria-label="Послужной список">
+          <Reveal delay={0}><section aria-label="Послужной список">
             <SectionHeader title="Послужной список" accent="blue" />
             <div className="plate grid grid-cols-3">
               <div className="border-r border-line px-5 py-4">
@@ -209,9 +210,9 @@ export async function PlayerProfile({
                 ))}
               </dl>
             </details>
-          </section>
+          </section></Reveal>
 
-          <section aria-label="История матчей">
+          <Reveal delay={0}><section aria-label="История матчей">
             <SectionHeader
               title="История матчей"
               meta={
@@ -229,12 +230,12 @@ export async function PlayerProfile({
                 emptyHint="За последние 30 дней игрок не выходил в бой."
               />
             </Panel>
-          </section>
+          </section></Reveal>
         </div>
 
         {/* right rail: telemetry */}
         <div className="space-y-10">
-          <section aria-label="Динамика рейтинга">
+          <Reveal delay={0}><section aria-label="Динамика рейтинга">
             <SectionHeader title="Динамика" meta={<span>30 дней</span>} />
             <Panel>
               <StepChart
@@ -244,9 +245,9 @@ export async function PlayerProfile({
                 height={200}
               />
             </Panel>
-          </section>
+          </section></Reveal>
 
-          <section aria-label="Активность">
+          <Reveal delay={80}><section aria-label="Активность">
             <SectionHeader title="Активность" meta={<span>14 дней</span>} />
             <Panel>
               <ActivityBars
@@ -257,9 +258,9 @@ export async function PlayerProfile({
                 матчей за период: {stats.activity.reduce((s, a) => s + a.matches, 0)}
               </p>
             </Panel>
-          </section>
+          </section></Reveal>
 
-          <section aria-label="Разбор за 30 дней">
+          <Reveal delay={120}><section aria-label="Разбор за 30 дней">
             <SectionHeader title="Разбор" meta={<span>30 дней</span>} />
             {stats.byFaction.length === 0 && stats.byMap.length === 0 ? (
               <EmptyState
@@ -283,7 +284,7 @@ export async function PlayerProfile({
                 <SliceTable slices={slices} kind={kind} />
               </div>
             )}
-          </section>
+          </section></Reveal>
         </div>
       </div>
     </div>

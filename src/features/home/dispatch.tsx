@@ -190,7 +190,8 @@ export async function MiniScorebugs() {
   if (strip.length === 0) return null;
   const mapCode = (id: string) => maps.find((m) => m.id === id)?.code ?? "—";
   return (
-    <section aria-label="Недавние матчи" className="grid grid-cols-1 gap-px border-y border-line bg-[color:var(--line-1)] sm:grid-cols-[1.2fr_1fr_1fr]">
+    <SignalAcquire>
+      <section aria-label="Недавние матчи" className="stagger-acq grid grid-cols-1 gap-px border-y border-line bg-[color:var(--line-1)] sm:grid-cols-[1.2fr_1fr_1fr]">
       {strip.map((m) => {
         const [l, r] = sides(m, fx);
         return (
@@ -220,7 +221,8 @@ export async function MiniScorebugs() {
           </Link>
         );
       })}
-    </section>
+      </section>
+    </SignalAcquire>
   );
 }
 
@@ -373,7 +375,7 @@ export async function PodiumStrip() {
         <p
           aria-hidden
           className={cn(
-            "display pointer-events-none absolute right-3 top-1 font-black text-ink",
+            "ghost-num display pointer-events-none absolute right-3 top-1 font-black text-ink",
             big ? "text-[104px] opacity-[0.12]" : "text-[56px] opacity-10",
           )}
         >
@@ -402,13 +404,13 @@ export async function PodiumStrip() {
           ПОЛНЫЙ РЕЙТИНГ
         </Link>
       </div>
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-[2fr_1fr_1fr]">
+      <div className="stagger grid grid-cols-1 gap-3 sm:grid-cols-[2fr_1fr_1fr]">
         {podium(first, 1, true)}
         {second ? podium(second, 2, false) : null}
         {third ? podium(third, 3, false) : null}
       </div>
       {rest.length > 0 ? (
-        <ol className="plate mt-3">
+        <ol className="plate stagger mt-3">
           {rest.map((e, i) => {
             const f = fx.get(e.player.factionId)!;
             return (

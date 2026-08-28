@@ -47,7 +47,7 @@ export async function MatchList({
   const days = matches.map((m) => dayFmt.format(new Date(m.startedAt)));
 
   return (
-    <ul>
+    <ul className="stagger">
       {matches.map((m, i) => {
         const [l, r] = orderByLight(
           { faction: faction(m.factionAId), score: m.scoreA, won: m.winner === "A" },
@@ -62,7 +62,7 @@ export async function MatchList({
             ) : null}
             <div
               className={cn(
-                "relative grid h-auto grid-cols-[1fr_auto] items-center gap-x-4 px-4 py-[10px] transition-colors hover:bg-[color:var(--layer-2)] sm:h-[48px] sm:grid-cols-[minmax(120px,0.8fr)_minmax(220px,1.2fr)_64px_88px_auto] sm:py-0",
+                "group relative grid h-auto grid-cols-[1fr_auto] items-center gap-x-4 px-4 py-[10px] transition-colors hover:bg-[color:var(--layer-2)] sm:h-[48px] sm:grid-cols-[minmax(120px,0.8fr)_minmax(220px,1.2fr)_64px_88px_auto] sm:py-0",
                 !showDay && i > 0 && "border-t border-line",
               )}
             >
