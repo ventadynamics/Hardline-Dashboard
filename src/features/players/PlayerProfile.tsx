@@ -89,14 +89,14 @@ export async function PlayerProfile({ playerId, isSelf = false }: { playerId: st
   return (
     <div className="mx-auto max-w-[1360px] space-y-10 px-4 py-8 sm:px-6">
       {/* identity strip */}
-      <section className="frame relative">
+      <section className="frame cut relative">
         <div className="hero-light" aria-hidden />
         <div className="relative flex flex-col gap-6 p-5 sm:p-6 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex items-center gap-5">
             <Avatar seed={player.id} tone={faction.colorToken} size={72} />
             <div>
               <div className="flex flex-wrap items-baseline gap-2.5">
-                <h1 className="display text-[30px] font-semibold leading-none text-ink">
+                <h1 className="display text-[clamp(34px,3.6vw,46px)] font-semibold leading-none text-ink">
                   {player.username}
                 </h1>
                 {clanEntry ? (
@@ -133,7 +133,7 @@ export async function PlayerProfile({ playerId, isSelf = false }: { playerId: st
           <div className="flex items-center gap-8">
             <div className="text-right">
               <p className="tech-label">Рейтинг</p>
-              <p className="tnum font-mono text-[32px] font-bold leading-none text-ink">{num(player.rating)}</p>
+              <p className="display tnum text-[40px] font-semibold leading-none text-ink">{num(player.rating)}</p>
             </div>
             <div className="hidden h-[52px] w-px bg-line2 sm:block" aria-hidden />
             <div className="tnum grid grid-cols-3 gap-x-7 text-right">

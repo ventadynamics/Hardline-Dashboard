@@ -33,7 +33,7 @@ export function SiteFooter() {
                 <span className="h-full w-[4px] rounded-[1px] bg-blue shadow-[0_0_8px_rgba(76,154,255,0.55)]" />
                 <span className="h-[10px] w-[4px] rounded-[1px] bg-red shadow-[0_0_8px_rgba(255,59,48,0.55)]" />
               </span>
-              <span className="display text-[17px] font-bold text-ink">HARDLINE</span>
+              <span className="display text-[24px] font-semibold text-ink">HARDLINE</span>
             </div>
             <p className="mt-3 max-w-[300px] text-[13px] leading-relaxed text-dim">
               Оперативный портал тактической RTS Hardline: статистика, рейтинги,

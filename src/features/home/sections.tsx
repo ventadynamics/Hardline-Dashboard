@@ -24,8 +24,8 @@ export function RailModule({
 }) {
   return (
     <section className="frame" aria-label={title}>
-      <header className="flex items-center justify-between gap-3 border-b border-line2 bg-raised px-3.5 py-2">
-        <h2 className="tele text-[11.5px] font-bold text-ink">{title}</h2>
+      <header className="flex items-center justify-between gap-3 border-b border-line2 bg-raised px-4 py-2.5">
+        <h2 className="display text-[15px] font-semibold text-ink">{title}</h2>
         {meta}
       </header>
       <div className={flush ? "" : "px-3.5 py-3"}>{children}</div>

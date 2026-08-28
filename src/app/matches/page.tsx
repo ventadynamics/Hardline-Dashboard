@@ -35,7 +35,8 @@ export default async function MatchesPage({
   return (
     <div className="mx-auto max-w-[1400px] space-y-5 px-4 py-8 sm:px-6">
       <PageTitle
-        title="МАТЧИ"
+        title="Матчи"
+        kicker="HARDLINE / АРХИВ БОЁВ"
         description="История боёв за последние 30 дней. Каждый матч открывается как полный тактический репорт."
         meta={<span className="tnum font-mono text-[11.5px] text-faint">{num(total)} матчей</span>}
       />

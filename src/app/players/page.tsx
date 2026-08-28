@@ -30,7 +30,8 @@ export default async function PlayersPage({
   return (
     <div className="mx-auto max-w-[1360px] space-y-6 px-4 py-8 sm:px-6">
       <PageTitle
-        title="ИГРОКИ"
+        title="Игроки"
+        kicker="HARDLINE / ЛИЧНЫЙ СОСТАВ"
         description="Общий реестр бойцов Hardline: рейтинг, результативность и предпочтения. Профиль каждого игрока открывается по клику."
         meta={<span className="font-mono text-[11.5px] text-faint">{num(total)} в списке</span>}
       />

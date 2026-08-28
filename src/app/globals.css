@@ -1,46 +1,47 @@
 @import "tailwindcss";
 
 /* ------------------------------------------------------------------ */
-/* HARDLINE — Night Dispatch design system.                            */
-/* Per the owner's brief: dark layered surfaces, translucency as       */
-/* interface layers, red/blue as LIGHT (never button fill), 0–6px     */
-/* rectangular shapes, restrained cinematic effects, disciplined      */
-/* technical graphics. Battlelog density, modern tactical web UI.     */
+/* HARDLINE — Redline design system (v3).                              */
+/* A police/crime war at night, shot like a film still: deep asphalt  */
+/* substrate, translucent interface layers, red and blue as LIGHT     */
+/* (washes, edge glows, the hardline strip) — never button fill.      */
+/* Condensed macro display (Oswald) over JetBrains Mono telemetry.    */
+/* Signature motifs: the red/blue hardline strip and the 45° cut.     */
 /* ------------------------------------------------------------------ */
 
 :root {
-  /* substrate: night asphalt with a cold cast */
-  --bg-0: #090b0f;
-  --bg-1: #0c0f14;
+  /* substrate: wet asphalt, almost black */
+  --bg-0: #06080c;
+  --bg-1: #0a0d12;
 
   /* translucent interface layers over the substrate */
-  --layer-1: rgba(214, 228, 252, 0.03);
-  --layer-2: rgba(214, 228, 252, 0.06);
-  --layer-3: rgba(214, 228, 252, 0.1);
+  --layer-1: rgba(208, 225, 255, 0.04);
+  --layer-2: rgba(208, 225, 255, 0.08);
+  --layer-3: rgba(208, 225, 255, 0.13);
 
   /* hairlines */
-  --line-1: rgba(214, 228, 252, 0.07);
-  --line-2: rgba(214, 228, 252, 0.11);
-  --line-3: rgba(214, 228, 252, 0.22);
-  --ink-line: rgba(232, 238, 247, 0.85);
+  --line-1: rgba(208, 225, 255, 0.08);
+  --line-2: rgba(208, 225, 255, 0.13);
+  --line-3: rgba(208, 225, 255, 0.26);
+  --ink-line: rgba(233, 240, 250, 0.9);
 
   /* text */
-  --text-1: #e9edf4;
-  --text-2: #9aa4b2;
-  --text-3: #626c7b;
+  --text-1: #eef2f8;
+  --text-2: #9daabb;
+  --text-3: #5f6a7a;
 
   /* light accents: red = hazard/alarm light, blue = police/data light */
-  --red: #ff3b30;
+  --red: #ff2f36;
   --red-deep: #8f1414;
-  --blue: #4c9aff;
-  --blue-bright: #85bbff;
+  --blue: #3f8dff;
+  --blue-bright: #86bbff;
   --olive: #9aa87c;
   --term-green: #3ce07a; /* reserved: live indicator ONLY */
   --gold: #d2a355;
 
   /* colored light washes (the one sanctioned use of gradients) */
-  --wash-red: rgba(255, 59, 48, 0.07);
-  --wash-blue: rgba(76, 154, 255, 0.08);
+  --wash-red: rgba(255, 47, 54, 0.12);
+  --wash-blue: rgba(63, 141, 255, 0.13);
 
   /* faction slots — provisional, changed centrally, never in components */
   --faction-blue: var(--blue);
@@ -114,9 +115,35 @@ body {
   z-index: -1;
   pointer-events: none;
   background:
-    radial-gradient(52% 38% at 12% -6%, var(--wash-blue), transparent 70%),
-    radial-gradient(44% 34% at 94% 2%, var(--wash-red), transparent 70%),
-    radial-gradient(60% 42% at 50% 108%, rgba(76, 154, 255, 0.04), transparent 72%);
+    radial-gradient(56% 44% at 8% -8%, var(--wash-blue), transparent 70%),
+    radial-gradient(50% 40% at 96% -4%, var(--wash-red), transparent 70%),
+    radial-gradient(64% 44% at 50% 110%, rgba(63, 141, 255, 0.05), transparent 72%);
+}
+
+/* the hardline: a strip of light split between the two sides of the war */
+.hardline-strip {
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    var(--blue) 0%,
+    rgba(63, 141, 255, 0.25) 38%,
+    rgba(255, 47, 54, 0.25) 62%,
+    var(--red) 100%
+  );
+  box-shadow: 0 0 14px rgba(63, 141, 255, 0.35), 0 0 14px rgba(255, 47, 54, 0.35);
+}
+
+/* signature 45° cut on a hero corner */
+.cut {
+  clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 0 100%);
+}
+
+/* colored edge light on a panel flank */
+.edge-red {
+  box-shadow: inset 2px 0 0 var(--red), inset 8px 0 18px -10px rgba(255, 47, 54, 0.6);
+}
+.edge-blue {
+  box-shadow: inset 2px 0 0 var(--blue), inset 8px 0 18px -10px rgba(63, 141, 255, 0.6);
 }
 
 ::selection {
@@ -162,29 +189,42 @@ select {
 /* Type system                                                         */
 /* ------------------------------------------------------------------ */
 
-/* macro display: architectural block type (Tektur is wide — no extra tracking) */
+/* macro display: tall condensed poster type (Oswald) */
 .display {
   font-family: var(--font-display-face), sans-serif;
   text-transform: uppercase;
-  letter-spacing: 0;
-  line-height: 0.95;
+  letter-spacing: 0.015em;
+  line-height: 0.92;
   text-wrap: balance;
 }
 
-/* mono telemetry: metadata, labels, nav, numerals (Martian Mono is wide) */
+/* mono telemetry: metadata, labels, nav, numerals (JetBrains Mono) */
 .tele {
   font-family: var(--font-mono-face), ui-monospace, monospace;
   text-transform: uppercase;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.07em;
 }
 
 .tech-label {
   font-family: var(--font-mono-face), ui-monospace, monospace;
-  font-size: 10px;
+  font-size: 10.5px;
   font-weight: 400;
-  letter-spacing: 0.07em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--text-3);
+}
+
+/* kicker: mono line opened by a red slash of light */
+.kicker {
+  font-family: var(--font-mono-face), ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-2);
+}
+.kicker::before {
+  content: "// ";
+  color: var(--red);
 }
 
 .tnum {

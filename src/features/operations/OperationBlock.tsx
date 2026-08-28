@@ -53,7 +53,7 @@ export async function OperationBlock() {
           </>
         }
       />
-      <div className="frame">
+      <div className="frame edge-red">
         <div>
           {op.tasks.map((t, i) => {
           const isDone = t.status === "done";

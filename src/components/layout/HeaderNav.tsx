@@ -36,7 +36,7 @@ function Wordmark() {
         <span className="h-full w-[4px] rounded-[1px] bg-blue shadow-[0_0_8px_rgba(76,154,255,0.55)]" />
         <span className="h-[10px] w-[4px] rounded-[1px] bg-red shadow-[0_0_8px_rgba(255,59,48,0.55)]" />
       </span>
-      <span className="display text-[17px] font-black leading-none text-ink">HARDLINE</span>
+      <span className="display text-[21px] font-semibold leading-none text-ink">HARDLINE</span>
       <span aria-hidden className="font-mono text-[10px] text-faint">®</span>
     </Link>
   );
@@ -73,7 +73,8 @@ export function HeaderNav({ user }: { user: HeaderUser }) {
       className="sticky top-0 z-50 border-b border-line2 bg-[rgba(9,11,15,0.82)] backdrop-blur-md"
       ref={rootRef}
     >
-      <div className="mx-auto flex h-[54px] max-w-[1400px] items-center gap-6 px-4 sm:px-6">
+      <div className="hardline-strip" aria-hidden />
+      <div className="mx-auto flex h-[58px] max-w-[1400px] items-center gap-6 px-4 sm:px-6">
         <Wordmark />
 
         <nav className="hidden flex-1 items-stretch self-stretch lg:flex" aria-label="Основная навигация">

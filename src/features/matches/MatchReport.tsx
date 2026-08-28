@@ -180,13 +180,13 @@ export async function MatchReport({ matchId }: { matchId: string }) {
   return (
     <div className="mx-auto max-w-[1400px] space-y-10 px-4 py-8 sm:px-6">
       {/* report head */}
-      <section className="frame">
+      <section className="frame cut">
         <div className="relative">
           <div className="hero-light" aria-hidden />
-          <div className="relative grid grid-cols-1 items-center gap-6 p-5 lg:grid-cols-[1.1fr_auto_1fr] lg:gap-10">
+          <div className="relative grid grid-cols-1 items-center gap-6 p-6 lg:grid-cols-[1.1fr_auto_1fr] lg:gap-10">
             <div>
-              <p className="tech-label">Матч-репорт · {dateTime(match.startedAt)}</p>
-              <h1 className="display mt-1.5 text-[30px] font-semibold leading-none text-ink">
+              <p className="kicker">Матч-репорт · {dateTime(match.startedAt)}</p>
+              <h1 className="display mt-1.5 text-[clamp(34px,3.6vw,48px)] font-semibold leading-none text-ink">
                 {map.name}
               </h1>
               <p className="mt-2 text-[13px] text-dim">
@@ -201,9 +201,9 @@ export async function MatchReport({ matchId }: { matchId: string }) {
                   </p>
                   {aWon && <p className="tech-label !text-success">победа</p>}
                 </div>
-                <p className="tnum font-mono text-[40px] font-bold leading-none text-ink">
+                <p className="display tnum text-[56px] font-semibold leading-none text-ink">
                   {teamA.score}
-                  <span className="mx-2 text-[26px] text-faint">:</span>
+                  <span className="mx-2 text-[34px] text-faint">:</span>
                   {teamB.score}
                 </p>
                 <div>
