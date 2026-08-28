@@ -1,0 +1,454 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------ */
+/* HARDLINE — Tactical Telemetry design system.                        */
+/* Industrial brutalism: deactivated-CRT substrate, phosphor ink,      */
+/* hazard-red structure, police-blue as data semantics only. 90deg     */
+/* geometry, visible compartments, mono telemetry, macro display type. */
+/* No gradients-as-decoration, no soft shadows, no glassmorphism.      */
+/* ------------------------------------------------------------------ */
+
+:root {
+  /* substrate */
+  --bg-0: #0b0c0d;
+  --bg-1: #0e0f11;
+  --surface-1: #101214;
+  --surface-2: #16181b;
+
+  /* structure */
+  --line-1: #212427;
+  --line-2: #2e3236;
+  --line-3: #43484d;
+  --ink-line: #caccce;
+
+  /* phosphor text */
+  --text-1: #ececea;
+  --text-2: #9a9d9f;
+  --text-3: #5e6265;
+
+  /* accents */
+  --red: #ff2a2a;          /* hazard: structure, alerts, strikes */
+  --red-deep: #8f1414;
+  --blue: #3d8bff;         /* police / data semantics only */
+  --blue-bright: #74acff;
+  --olive: #97a578;        /* third-faction data */
+  --term-green: #4af626;   /* reserved: live indicator ONLY */
+  --gold: #d2a355;
+
+  /* faction slots — provisional, changed centrally, never in components */
+  --faction-blue: var(--blue);
+  --faction-red: var(--red);
+  --faction-olive: var(--olive);
+
+  /* geometry: 90 degrees only */
+  --radius-0: 0px;
+
+  /* motion */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-io: cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+@theme inline {
+  --color-bg0: var(--bg-0);
+  --color-bg1: var(--bg-1);
+  --color-panel: var(--surface-1);
+  --color-raised: var(--surface-2);
+  --color-line: var(--line-1);
+  --color-line2: var(--line-2);
+  --color-line3: var(--line-3);
+  --color-inkline: var(--ink-line);
+  --color-ink: var(--text-1);
+  --color-dim: var(--text-2);
+  --color-faint: var(--text-3);
+  --color-red: var(--red);
+  --color-blue: var(--blue);
+  --color-bluebright: var(--blue-bright);
+  --color-olive: var(--olive);
+  --color-termgreen: var(--term-green);
+  --color-gold: var(--gold);
+  --color-success: var(--text-1);
+  --color-redbright: #ff6b6b;
+  --color-warning: var(--gold);
+  --font-sans: var(--font-body), system-ui, sans-serif;
+  --font-display: var(--font-display-face), var(--font-body), sans-serif;
+  --font-mono: var(--font-mono-face), ui-monospace, monospace;
+  --radius-sm: 0px;
+  --radius-DEFAULT: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+}
+
+/* ------------------------------------------------------------------ */
+/* Base                                                                */
+/* ------------------------------------------------------------------ */
+
+html {
+  height: 100%;
+}
+
+body {
+  background: var(--bg-0);
+  color: var(--text-1);
+  font-family: var(--font-body), system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  min-height: 100%;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--red);
+  color: #0b0c0d;
+}
+
+input,
+textarea,
+select {
+  caret-color: var(--red);
+  border-radius: 0;
+}
+
+::placeholder {
+  color: var(--text-3);
+  opacity: 1;
+}
+
+:focus-visible {
+  outline: 1px solid var(--red);
+  outline-offset: 2px;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--line-3) transparent;
+}
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--line-3);
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* ------------------------------------------------------------------ */
+/* Type system                                                         */
+/* ------------------------------------------------------------------ */
+
+/* macro display: architectural block type (Tektur is wide — no extra tracking) */
+.display {
+  font-family: var(--font-display-face), sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0;
+  line-height: 0.95;
+}
+
+/* mono telemetry: ALL metadata, labels, nav, numerals (Martian Mono is wide) */
+.tele {
+  font-family: var(--font-mono-face), ui-monospace, monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.tech-label {
+  font-family: var(--font-mono-face), ui-monospace, monospace;
+  font-size: 9.5px;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+
+.tnum {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+}
+
+/* ------------------------------------------------------------------ */
+/* Structure: compartments, rules, frames                              */
+/* ------------------------------------------------------------------ */
+
+/* framed compartment */
+.frame {
+  background: var(--surface-1);
+  border: 1px solid var(--line-2);
+}
+
+/* mathematically perfect dividing lines: grid gap over contrast bg */
+.grid-seam {
+  display: grid;
+  gap: 1px;
+  background: var(--line-2);
+  border: 1px solid var(--line-2);
+}
+.grid-seam > * {
+  background: var(--surface-1);
+}
+
+/* full-width structural rules */
+.rule-ink {
+  border-top: 2px solid var(--ink-line);
+}
+.rule-red {
+  border-top: 2px solid var(--red);
+}
+
+/* hazard warning stripes */
+.stripes-red {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    var(--red) 0 8px,
+    transparent 8px 16px
+  );
+}
+.stripes-ink {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    var(--line-2) 0 6px,
+    transparent 6px 12px
+  );
+}
+
+/* barcode: repeating vertical lines */
+.barcode {
+  background-image: repeating-linear-gradient(
+    90deg,
+    var(--text-2) 0 2px,
+    transparent 2px 5px,
+    var(--text-2) 5px 6px,
+    transparent 6px 11px,
+    var(--text-2) 11px 14px,
+    transparent 14px 18px
+  );
+}
+
+/* crosshair at grid intersections */
+.crosshair {
+  position: relative;
+}
+.crosshair::before,
+.crosshair::after {
+  content: "";
+  position: absolute;
+  background: var(--line-3);
+}
+.crosshair::before {
+  width: 11px;
+  height: 1px;
+  left: -6px;
+  top: -1px;
+}
+.crosshair::after {
+  width: 1px;
+  height: 11px;
+  left: -1px;
+  top: -6px;
+}
+
+/* ------------------------------------------------------------------ */
+/* Analog degradation                                                  */
+/* ------------------------------------------------------------------ */
+
+/* CRT scanlines */
+.scanlines {
+  background-image: repeating-linear-gradient(
+    0deg,
+    transparent 0 2px,
+    rgba(0, 0, 0, 0.16) 2px 4px
+  );
+}
+
+/* halftone dot screen for imagery — visible texture, not corrosion */
+.halftone-overlay {
+  background-image: radial-gradient(circle, rgba(6, 7, 8, 0.55) 0.8px, transparent 1.2px);
+  background-size: 3.5px 3.5px;
+  mix-blend-mode: multiply;
+  opacity: 0.8;
+}
+
+/* mechanical noise — one fixed overlay, mounted once in layout */
+.grain-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  pointer-events: none;
+  opacity: 0.06;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+  mix-blend-mode: overlay;
+}
+
+/* phosphor glow — the one emissive concession, hero-scale only */
+@keyframes light-drift-a {
+  0% { transform: translate3d(-4%, -2%, 0) scale(1); }
+  50% { transform: translate3d(5%, 3%, 0) scale(1.08); }
+  100% { transform: translate3d(-4%, -2%, 0) scale(1); }
+}
+@keyframes light-drift-b {
+  0% { transform: translate3d(3%, 2%, 0) scale(1.05); }
+  50% { transform: translate3d(-5%, -3%, 0) scale(1); }
+  100% { transform: translate3d(3%, 2%, 0) scale(1.05); }
+}
+.drift-a { animation: light-drift-a 26s var(--ease-io) infinite; }
+.drift-b { animation: light-drift-b 32s var(--ease-io) infinite; }
+
+/* live indicator — the ONLY terminal-green element */
+@keyframes live-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+.live-dot {
+  width: 7px;
+  height: 7px;
+  background: var(--term-green);
+  animation: live-pulse 2.2s steps(2, end) infinite;
+}
+.live-dot--red {
+  background: var(--red);
+}
+.live-dot--blue {
+  background: var(--blue);
+}
+
+/* ------------------------------------------------------------------ */
+/* Entry choreography                                                  */
+/* ------------------------------------------------------------------ */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 0.6s var(--ease-out),
+    transform 0.6s var(--ease-out);
+  transition-delay: var(--d, 0ms);
+}
+.reveal[data-shown="true"] {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .drift-a,
+  .drift-b,
+  .live-dot {
+    animation: none;
+  }
+  .reveal {
+    transition: opacity 0.2s ease;
+    transform: none;
+    opacity: 1;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Data tables: compartmentalized telemetry                            */
+/* ------------------------------------------------------------------ */
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.data-table th {
+  font-family: var(--font-mono-face), ui-monospace, monospace;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  text-align: left;
+  padding: 7px 10px;
+  border-bottom: 1px solid var(--line-3);
+  white-space: nowrap;
+}
+.data-table td {
+  padding: 7px 10px;
+  border-bottom: 1px solid var(--line-1);
+  font-size: 13px;
+  vertical-align: middle;
+}
+.data-table tbody tr:last-child td {
+  border-bottom: none;
+}
+.data-table tbody tr {
+  transition: background-color 100ms var(--ease-out);
+}
+.data-table tbody tr:hover {
+  background: var(--surface-2);
+}
+.data-table .num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  font-family: var(--font-mono-face), monospace;
+  font-size: 12px;
+}
+
+.row-link {
+  position: absolute;
+  inset: 0;
+}
+
+/* ------------------------------------------------------------------ */
+/* Controls                                                            */
+/* ------------------------------------------------------------------ */
+
+/* mechanical inversion on hover; press acknowledges instantly */
+.ctrl {
+  font-family: var(--font-mono-face), ui-monospace, monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border: 1px solid var(--line-3);
+  color: var(--text-1);
+  background: transparent;
+  transition: background-color 120ms var(--ease-out), color 120ms var(--ease-out),
+    border-color 120ms var(--ease-out), transform 120ms var(--ease-out);
+}
+.ctrl:hover {
+  background: var(--text-1);
+  border-color: var(--text-1);
+  color: var(--bg-0);
+}
+.ctrl:active {
+  transform: scale(0.97);
+}
+.ctrl--red {
+  border-color: var(--red);
+  color: var(--red);
+}
+.ctrl--red:hover {
+  background: var(--red);
+  border-color: var(--red);
+  color: #fff;
+}
+
+.pressable {
+  transition: transform 120ms var(--ease-out), background-color 120ms var(--ease-out),
+    border-color 120ms var(--ease-out), color 120ms var(--ease-out);
+}
+.pressable:active {
+  transform: scale(0.97);
+}
+
+/* nav item: red strike-through active state */
+.nav-item {
+  position: relative;
+}
+.nav-item::after {
+  content: "";
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 6px;
+  height: 2px;
+  background: var(--red);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 160ms var(--ease-out);
+}
+.nav-item:hover::after {
+  transform: scaleX(0.55);
+}
+.nav-item[data-active="true"]::after {
+  transform: scaleX(1);
+}
