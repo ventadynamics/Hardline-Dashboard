@@ -31,7 +31,9 @@ export function SectionHeader({
             )}
           />
         ) : null}
-        {title}
+        <span className="glitch-title" data-text={title}>
+          {title}
+        </span>
       </h2>
       <div className="min-w-6 flex-1 self-center border-t border-line2" aria-hidden />
       {meta ? <div className="tele flex shrink-0 items-center gap-3 text-[10.5px] text-dim">{meta}</div> : null}

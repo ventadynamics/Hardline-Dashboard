@@ -500,6 +500,161 @@ select {
   }
 }
 
+/* ------------------------------------------------------------------ */
+/* Cinematic layer: channel switching, headline glitches, the strike   */
+/* ------------------------------------------------------------------ */
+
+/* channel switch: every navigation is a CRT wipe onto the next feed */
+@keyframes channel-in {
+  0% {
+    opacity: 0.4;
+    clip-path: inset(0 0 96% 0);
+  }
+  55% {
+    opacity: 1;
+    clip-path: inset(0 0 28% 0);
+  }
+  100% {
+    opacity: 1;
+    clip-path: inset(0);
+  }
+}
+.channel-in {
+  animation: channel-in 240ms var(--ease-out) 1;
+}
+
+/* headline RGB tear when its section lands */
+.glitch-title {
+  position: relative;
+}
+.glitch-title::before,
+.glitch-title::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  opacity: 0;
+  pointer-events: none;
+}
+.glitch-title::before {
+  color: var(--police);
+}
+.glitch-title::after {
+  color: var(--hazard);
+}
+.reveal[data-shown="true"] .glitch-title::before {
+  animation: glitch-a 360ms steps(2, end) 140ms 1;
+}
+.reveal[data-shown="true"] .glitch-title::after {
+  animation: glitch-b 360ms steps(2, end) 140ms 1;
+}
+
+/* the seam strikes: scaleY in, then two flickers before holding */
+[data-acquire="true"] .seam-v::after {
+  transform-origin: top;
+  animation: seam-strike 520ms var(--ease-out) 200ms both;
+}
+@keyframes seam-strike {
+  0% {
+    opacity: 0;
+    transform: skewX(var(--seam-skew)) scaleY(0);
+  }
+  50% {
+    opacity: 1;
+    transform: skewX(var(--seam-skew)) scaleY(1);
+  }
+  64% {
+    opacity: 0.35;
+  }
+  76% {
+    opacity: 1;
+  }
+  86% {
+    opacity: 0.55;
+  }
+  100% {
+    opacity: 1;
+    transform: skewX(var(--seam-skew)) scaleY(1);
+  }
+}
+
+/* one scanline crossing the hero stage on acquisition */
+.hero-scan {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(
+    180deg,
+    transparent 46%,
+    rgba(205, 222, 255, 0.09) 50%,
+    transparent 54%
+  );
+}
+[data-acquire="true"] .hero-scan {
+  animation: hero-scan 750ms var(--ease-io) 120ms 1;
+}
+@keyframes hero-scan {
+  0% {
+    opacity: 1;
+    transform: translateY(-55%);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(55%);
+  }
+}
+
+/* wordmark shudders under the pointer */
+@keyframes wm-glitch {
+  0% {
+    transform: translate(-1px, 1px) skewX(-3deg);
+  }
+  40% {
+    transform: translate(1px, -1px);
+  }
+  70% {
+    transform: translate(-1px, 0);
+  }
+  100% {
+    transform: none;
+  }
+}
+@media (hover: hover) and (pointer: fine) {
+  .wordmark-plate:hover {
+    animation: wm-glitch 280ms steps(2, end) 1;
+  }
+}
+
+/* amber shine sweeping the MVP lower-third when it lands */
+.shine {
+  position: relative;
+  overflow: hidden;
+}
+.shine::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: 40%;
+  background: linear-gradient(
+    100deg,
+    transparent,
+    rgba(232, 163, 61, 0.12),
+    transparent
+  );
+  transform: translateX(-160%) skewX(-12deg);
+  pointer-events: none;
+}
+.reveal[data-shown="true"] .shine::after {
+  animation: shine-run 900ms var(--ease-out) 260ms 1;
+}
+@keyframes shine-run {
+  to {
+    transform: translateX(420%) skewX(-12deg);
+  }
+}
+
 /* the seam junction answers the pointer */
 .seam-junction {
   transition: box-shadow var(--dur-hover) var(--ease-out);
@@ -556,6 +711,25 @@ select {
     animation: none;
   }
   [data-acquire="true"] .stagger-acq > * {
+    animation: none;
+  }
+  .channel-in {
+    animation: none;
+  }
+  .reveal[data-shown="true"] .glitch-title::before,
+  .reveal[data-shown="true"] .glitch-title::after {
+    animation: none;
+  }
+  [data-acquire="true"] .seam-v::after {
+    animation: none;
+  }
+  [data-acquire="true"] .hero-scan {
+    animation: none;
+  }
+  .wordmark-plate:hover {
+    animation: none;
+  }
+  .reveal[data-shown="true"] .shine::after {
     animation: none;
   }
   .reveal .chart-draw {

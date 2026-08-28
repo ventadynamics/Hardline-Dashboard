@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import { IBM_Plex_Mono, IBM_Plex_Sans, Tektur } from "next/font/google";
+import { ChannelSwitch } from "@/components/fx/ChannelSwitch";
 import { CityGrid } from "@/components/fx/CityGrid";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
@@ -66,7 +67,9 @@ FINISH: unreviewed and undocumented is unfinished.
         <CityGrid />
         <div className="grain" aria-hidden />
         <SiteHeader />
-        <main className="relative flex-1">{children}</main>
+        <main className="relative flex-1">
+          <ChannelSwitch>{children}</ChannelSwitch>
+        </main>
         <SiteFooter />
       </body>
     </html>

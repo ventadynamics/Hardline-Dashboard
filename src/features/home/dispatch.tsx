@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Avatar } from "@/components/ui/Avatar";
+import { NumberRise } from "@/components/fx/NumberRise";
 import { SignalAcquire } from "@/components/fx/SignalAcquire";
 import { Countdown } from "@/components/live/Countdown";
 import { MapThumb } from "@/components/ui/MapThumb";
@@ -97,6 +98,7 @@ export async function HeroScorebug() {
           className="group relative block overflow-hidden border-b border-line2"
         >
           <div className="relative grid min-h-[300px] grid-cols-1 lg:min-h-[420px] lg:grid-cols-[1fr_200px_1fr]">
+            <div className="hero-scan" aria-hidden />
             {/* light fields: blue enters LEFT, red enters RIGHT */}
             <div className={cn("wipe-l pointer-events-none absolute inset-y-0 left-0 w-full lg:w-1/2", fieldFor(l.faction.colorToken, "l"))} aria-hidden />
             <div className={cn("wipe-r pointer-events-none absolute inset-y-0 right-0 hidden w-1/2 lg:block", fieldFor(r.faction.colorToken, "r"))} aria-hidden />
@@ -264,7 +266,7 @@ export async function OperatorRail() {
             </div>
             <p className="tech-label">Рейтинг</p>
             <p className="display tnum relative mt-1 text-[44px] font-bold leading-none text-ink">
-              {num(p.rating)}
+              <NumberRise value={p.rating} />
             </p>
             {rank ? <p className="tnum relative mt-1 font-mono text-[10.5px] text-faint">#{rank} в зачёте</p> : null}
           </div>
@@ -398,7 +400,9 @@ export async function PodiumStrip() {
   return (
     <section aria-label="Лидеры недели">
       <div className="mb-4 flex items-baseline gap-4">
-        <h2 className="display text-[24px] font-bold text-ink">Лидеры недели</h2>
+        <h2 className="display text-[24px] font-bold text-ink">
+          <span className="glitch-title" data-text="Лидеры недели">Лидеры недели</span>
+        </h2>
         <div className="min-w-6 flex-1 self-center border-t border-line2" aria-hidden />
         <Link href="/players" className="tele text-[10.5px] text-dim transition-colors hover:text-ink">
           ПОЛНЫЙ РЕЙТИНГ
@@ -471,7 +475,9 @@ export async function MapOfWeek() {
   return (
     <section aria-label="Карта недели">
       <div className="mb-4 flex items-baseline gap-4">
-        <h2 className="display text-[24px] font-bold text-ink">Карта недели</h2>
+        <h2 className="display text-[24px] font-bold text-ink">
+          <span className="glitch-title" data-text="Карта недели">Карта недели</span>
+        </h2>
         <div className="min-w-6 flex-1 self-center border-t border-line2" aria-hidden />
         <Link href="/maps" className="tele text-[10.5px] text-dim transition-colors hover:text-ink">
           ВСЕ КАРТЫ

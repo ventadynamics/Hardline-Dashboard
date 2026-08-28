@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Avatar } from "@/components/ui/Avatar";
+import { NumberRise } from "@/components/fx/NumberRise";
 import { Reveal } from "@/components/ui/Reveal";
 import { FactionTag } from "@/components/ui/badges";
 import { ActivityBars, StepChart } from "@/components/ui/charts";
@@ -150,7 +151,9 @@ export async function PlayerProfile({
           </div>
           <div className="text-left lg:text-right">
             <p className="tech-label">Рейтинг</p>
-            <p className="display tnum text-[72px] font-black leading-none text-ink">{num(player.rating)}</p>
+            <p className="display tnum text-[72px] font-black leading-none text-ink">
+              <NumberRise value={player.rating} />
+            </p>
             <p className="tnum mt-2 font-mono text-[11.5px] text-dim">
               {rank ? `#${rank} в зачёте` : "вне зачёта"}
               <span className={cn("ml-3", delta >= 0 ? "text-[color:var(--police-hi)]" : "text-[color:var(--hazard-hi)]")}>

@@ -298,7 +298,7 @@ export async function MatchReport({ matchId }: { matchId: string }) {
       <div className="mx-auto mt-12 max-w-[1400px] space-y-12 px-4 sm:px-6">
         {/* MVP lower-third */}
         {mvp ? (
-          <Reveal><section aria-label="Лучший игрок матча" className="plate rail-amber relative">
+          <Reveal><section aria-label="Лучший игрок матча" className="plate shine rail-amber relative">
             <Link
               href={`/players/${mvp.playerId}`}
               className="flex flex-wrap items-center gap-x-6 gap-y-3 px-5 py-4 transition-colors hover:bg-[color:var(--layer-2)]"
