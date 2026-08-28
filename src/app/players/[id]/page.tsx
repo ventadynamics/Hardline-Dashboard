@@ -11,11 +11,23 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { id } = await params;
   const player = await playerService.byId(id);
-  return { title: player ? `${player.username} — профиль` : "Игрок не найден" };
+  return { title: player ? `${player.username} — досье` : "Игрок не найден" };
 }
 
-export default async function PlayerPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
-  const session = await sessionService.current();
-  return <PlayerProfile playerId={id} isSelf={session.player.id === id} />;
+export default async function PlayerPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ breakdown?: string }>;
+}) {
+  const [{ id }, sp, session] = await Promise.all([params, searchParams, sessionService.current()]);
+  return (
+    <PlayerProfile
+      playerId={id}
+      isSelf={session.player.id === id}
+      breakdown={sp.breakdown}
+      basePath={`/players/${id}`}
+    />
+  );
 }

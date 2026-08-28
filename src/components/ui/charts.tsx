@@ -1,17 +1,27 @@
 import { cn } from "@/lib/cn";
 
 /**
- * Hand-drawn SVG charts in the portal's own grammar: thin strokes, faint
- * fills, mono axis labels. No chart library, no SaaS palette.
+ * Step-line telemetry grammar: every line is a right-angle step-after
+ * polyline — bezier smoothing is banned. Authored SVG, explicit sizes,
+ * mono axis text, one real annotation per chart.
  */
 
 const strokeTone = {
-  blue: "var(--blue)",
-  red: "var(--red)",
-  olive: "var(--olive)",
+  blue: "var(--police)",
+  red: "var(--hazard)",
+  olive: "var(--faction-olive)",
 } as const;
 
 type Tone = keyof typeof strokeTone;
+
+function stepPoints(values: number[], x: (i: number) => number, y: (v: number) => number): string {
+  const pts: string[] = [];
+  values.forEach((v, i) => {
+    pts.push(`${x(i)},${y(v)}`);
+    if (i < values.length - 1) pts.push(`${x(i + 1)},${y(v)}`);
+  });
+  return pts.join(" ");
+}
 
 export function Sparkline({
   values,
@@ -30,20 +40,28 @@ export function Sparkline({
   const min = Math.min(...values);
   const max = Math.max(...values);
   const span = max - min || 1;
-  const pts = values
-    .map((v, i) => `${(i / (values.length - 1)) * width},${height - 3 - ((v - min) / span) * (height - 6)}`)
-    .join(" ");
+  const x = (i: number) => (i / (values.length - 1)) * (width - 4);
+  const y = (v: number) => height - 3 - ((v - min) / span) * (height - 6);
+  const lastX = x(values.length - 1);
+  const lastY = y(values[values.length - 1]);
   return (
     <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} className={className} aria-hidden>
-      <polyline points={pts} fill="none" stroke={strokeTone[tone]} strokeWidth="1.25" strokeLinejoin="round" />
+      <polyline
+        points={stepPoints(values, x, y)}
+        fill="none"
+        stroke={strokeTone[tone]}
+        strokeWidth="1.25"
+      />
+      <rect x={lastX - 1} y={lastY - 1} width="2" height="2" fill={strokeTone[tone]} />
     </svg>
   );
 }
 
-export function AreaChart({
+/** Step-after line chart with rating-band hairlines and an end-value chip. */
+export function StepChart({
   points,
   tone = "blue",
-  height = 160,
+  height = 200,
   ariaLabel,
   className,
 }: {
@@ -56,6 +74,7 @@ export function AreaChart({
   const W = 640;
   const H = height;
   const padL = 44;
+  const padR = 56;
   const padB = 22;
   const padT = 10;
   if (points.length < 2) return null;
@@ -63,12 +82,10 @@ export function AreaChart({
   const min = Math.min(...vals);
   const max = Math.max(...vals);
   const span = max - min || 1;
-  const x = (i: number) => padL + (i / (points.length - 1)) * (W - padL - 8);
+  const x = (i: number) => padL + (i / (points.length - 1)) * (W - padL - padR);
   const y = (v: number) => padT + (1 - (v - min) / span) * (H - padT - padB);
-  const line = points.map((p, i) => `${x(i)},${y(p.value)}`).join(" ");
-  const area = `${padL},${H - padB} ${line} ${x(points.length - 1)},${H - padB}`;
-  const gid = `ac-${tone}`;
-  const gridYs = [min, min + span / 2, max];
+  const last = vals[vals.length - 1];
+  const bands = [min, min + span / 2, max];
   return (
     <svg
       viewBox={`0 0 ${W} ${H}`}
@@ -77,44 +94,64 @@ export function AreaChart({
       className={cn("w-full", className)}
       preserveAspectRatio="none"
     >
-      <defs>
-        <linearGradient id={gid} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor={strokeTone[tone]} stopOpacity="0.22" />
-          <stop offset="100%" stopColor={strokeTone[tone]} stopOpacity="0" />
-        </linearGradient>
-      </defs>
-      {gridYs.map((v, i) => (
+      {bands.map((v, i) => (
         <g key={i}>
-          <line x1={padL} y1={y(v)} x2={W - 8} y2={y(v)} stroke="var(--line-1)" strokeWidth="1" />
+          <line x1={padL} y1={y(v)} x2={W - padR + 40} y2={y(v)} stroke="var(--line-1)" strokeWidth="1" />
           <text
             x={padL - 6}
             y={y(v) + 3}
             textAnchor="end"
-            fontSize="9"
-            fill="var(--text-3)"
+            fontSize="9.5"
+            fill="var(--faint)"
             fontFamily="var(--font-mono-face), monospace"
           >
             {Math.round(v)}
           </text>
         </g>
       ))}
-      <polygon points={area} fill={`url(#${gid})`} />
-      <polyline points={line} fill="none" stroke={strokeTone[tone]} strokeWidth="1.5" strokeLinejoin="round" />
+      <polyline
+        points={stepPoints(vals, x, y)}
+        fill="none"
+        stroke={strokeTone[tone]}
+        strokeWidth="1.5"
+      />
+      {/* current-value chip riding the line end */}
+      <g>
+        <rect
+          x={x(points.length - 1) + 4}
+          y={y(last) - 9}
+          width={padR - 12}
+          height={18}
+          fill="var(--carbon-2)"
+          stroke="var(--line-2)"
+        />
+        <text
+          x={x(points.length - 1) + 4 + (padR - 12) / 2}
+          y={y(last) + 3.5}
+          textAnchor="middle"
+          fontSize="10.5"
+          fontWeight="500"
+          fill="var(--ink)"
+          fontFamily="var(--font-mono-face), monospace"
+        >
+          {Math.round(last)}
+        </text>
+      </g>
       <text
         x={padL}
         y={H - 6}
-        fontSize="9"
-        fill="var(--text-3)"
+        fontSize="9.5"
+        fill="var(--faint)"
         fontFamily="var(--font-mono-face), monospace"
       >
         {points[0].label}
       </text>
       <text
-        x={W - 8}
+        x={W - padR + 40}
         y={H - 6}
         textAnchor="end"
-        fontSize="9"
-        fill="var(--text-3)"
+        fontSize="9.5"
+        fill="var(--faint)"
         fontFamily="var(--font-mono-face), monospace"
       >
         {points[points.length - 1].label}
@@ -123,6 +160,7 @@ export function AreaChart({
   );
 }
 
+/** Per-day activity bars: 6px columns, 3px gaps, mono axis. */
 export function ActivityBars({
   data,
   tone = "blue",
@@ -133,7 +171,7 @@ export function ActivityBars({
   className?: string;
 }) {
   const W = 640;
-  const H = 84;
+  const H = 96;
   const padB = 16;
   const max = Math.max(1, ...data.map((d) => d.value));
   const bw = (W - 8) / data.length;
@@ -141,16 +179,16 @@ export function ActivityBars({
     <svg viewBox={`0 0 ${W} ${H}`} className={cn("w-full", className)} aria-hidden preserveAspectRatio="none">
       <line x1="0" y1={H - padB} x2={W} y2={H - padB} stroke="var(--line-2)" strokeWidth="1" />
       {data.map((d, i) => {
-        const h = (d.value / max) * (H - padB - 8);
+        const h = (d.value / max) * (H - padB - 10);
         return (
           <g key={i}>
             <rect
-              x={i * bw + bw * 0.22}
+              x={i * bw + bw * 0.3}
               y={H - padB - h}
-              width={bw * 0.56}
+              width={bw * 0.4}
               height={Math.max(1, h)}
               fill={strokeTone[tone]}
-              opacity={d.value === 0 ? 0.14 : 0.75}
+              opacity={d.value === 0 ? 0.15 : 0.8}
             />
             {i % 2 === 0 ? (
               <text
@@ -158,7 +196,7 @@ export function ActivityBars({
                 y={H - 4}
                 textAnchor="middle"
                 fontSize="8.5"
-                fill="var(--text-3)"
+                fill="var(--faint)"
                 fontFamily="var(--font-mono-face), monospace"
               >
                 {d.label}

@@ -33,40 +33,43 @@ export default async function MatchesPage({
   });
 
   return (
-    <div className="mx-auto max-w-[1400px] space-y-5 px-4 py-8 sm:px-6">
+    <div className="mx-auto max-w-[1400px] space-y-6 px-4 py-8 sm:px-6">
       <PageTitle
         title="Матчи"
-        kicker="HARDLINE / АРХИВ БОЁВ"
-        description="История боёв за последние 30 дней. Каждый матч открывается как полный тактический репорт."
+        description="Архив боёв за последние 30 дней. Каждый матч открывается как полная трансляция - составы, потери, хроника."
         meta={<span className="tnum font-mono text-[11.5px] text-faint">{num(total)} матчей</span>}
       />
-      <FilterBar
-        fields={[
-          {
-            type: "select",
-            name: "map",
-            label: "Карта",
-            options: [{ value: "", label: "Все карты" }, ...maps.map((m) => ({ value: m.id, label: m.name }))],
-          },
-          {
-            type: "select",
-            name: "mode",
-            label: "Режим",
-            options: [{ value: "", label: "Все режимы" }, ...modes.map((m) => ({ value: m.id, label: m.name }))],
-          },
-          {
-            type: "select",
-            name: "faction",
-            label: "Фракция",
-            options: [{ value: "", label: "Все фракции" }, ...factions.map((f) => ({ value: f.id, label: f.name }))],
-          },
-        ]}
-      />
-      <div className="frame">
+      <div className="sticky top-[60px] z-[var(--z-ticker)] -mx-4 border-b border-line2 bg-[rgba(5,7,11,0.85)] px-4 py-3 backdrop-blur-md sm:-mx-6 sm:px-6">
+        <FilterBar
+          fields={[
+            {
+              type: "select",
+              name: "map",
+              label: "Карта",
+              options: [{ value: "", label: "Все карты" }, ...maps.map((m) => ({ value: m.id, label: m.name }))],
+            },
+            {
+              type: "select",
+              name: "mode",
+              label: "Режим",
+              options: [{ value: "", label: "Все режимы" }, ...modes.map((m) => ({ value: m.id, label: m.name }))],
+            },
+            {
+              type: "select",
+              name: "faction",
+              label: "Фракция",
+              options: [{ value: "", label: "Все фракции" }, ...factions.map((f) => ({ value: f.id, label: f.name }))],
+            },
+          ]}
+        />
+      </div>
+      <div className="plate">
         <MatchList
           matches={matches}
+          groupByDay
           emptyTitle="Матчей по таким фильтрам нет"
           emptyHint="Сбросьте фильтры или загляните позже."
+          emptyAction={{ href: "/matches", label: "СБРОСИТЬ ФИЛЬТРЫ" }}
         />
       </div>
       <Pagination

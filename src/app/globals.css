@@ -1,93 +1,111 @@
 @import "tailwindcss";
 
 /* ------------------------------------------------------------------ */
-/* HARDLINE — Redline design system (v3).                              */
-/* A police/crime war at night, shot like a film still: deep asphalt  */
-/* substrate, translucent interface layers, red and blue as LIGHT     */
-/* (washes, edge glows, the hardline strip) — never button fill.      */
-/* Condensed macro display (Oswald) over JetBrains Mono telemetry.    */
-/* Signature motifs: the red/blue hardline strip and the 45° cut.     */
+/* HARDLINE — «ЭФИР 10-33» (On-Air Split Broadcast).                   */
+/* The portal is the war's live broadcast. One identity device: the   */
+/* ON-AIR SEAM — a 78° frontier where the blue police light-field     */
+/* and the red hazard light-field collide over instrument chrome.     */
+/* LIGHT LAW: blue enters from the LEFT, red from the RIGHT, always.  */
+/* The seam core is ink-white; blue-to-red gradients are banned.      */
 /* ------------------------------------------------------------------ */
 
 :root {
-  /* substrate: wet asphalt, almost black */
-  --bg-0: #06080c;
-  --bg-1: #0a0d12;
+  /* substrate — one cool gray family, never pure black */
+  --carbon-0: #05070b;
+  --carbon-1: #0b0f16;
+  --carbon-2: #101623;
 
-  /* translucent interface layers over the substrate */
-  --layer-1: rgba(208, 225, 255, 0.04);
-  --layer-2: rgba(208, 225, 255, 0.08);
-  --layer-3: rgba(208, 225, 255, 0.13);
-
-  /* hairlines */
-  --line-1: rgba(208, 225, 255, 0.08);
-  --line-2: rgba(208, 225, 255, 0.13);
-  --line-3: rgba(208, 225, 255, 0.26);
-  --ink-line: rgba(233, 240, 250, 0.9);
+  /* translucent layers over substrate */
+  --layer-1: rgba(205, 222, 255, 0.045);
+  --layer-2: rgba(205, 222, 255, 0.085);
+  --line-1: rgba(205, 222, 255, 0.09);
+  --line-2: rgba(205, 222, 255, 0.16);
 
   /* text */
-  --text-1: #eef2f8;
-  --text-2: #9daabb;
-  --text-3: #5f6a7a;
+  --ink: #edf2fa;
+  --dim: #93a1b5;
+  --faint: #5c6878;
 
-  /* light accents: red = hazard/alarm light, blue = police/data light */
-  --red: #ff2f36;
-  --red-deep: #8f1414;
-  --blue: #3f8dff;
-  --blue-bright: #86bbff;
-  --olive: #9aa87c;
-  --term-green: #3ce07a; /* reserved: live indicator ONLY */
-  --gold: #d2a355;
+  /* the two lights */
+  --police: #2f7bff;
+  --police-hi: #8fbaff; /* the only blue for text <28px */
+  --hazard: #ff3b3b;
+  --hazard-hi: #ff8a85; /* the only red for text <28px */
+  --amber: #e8a33d; /* records, MVP, <1h countdown — rationed */
+  --live: #45e07f; /* live indicator ONLY */
 
-  /* colored light washes (the one sanctioned use of gradients) */
-  --wash-red: rgba(255, 47, 54, 0.12);
-  --wash-blue: rgba(63, 141, 255, 0.13);
+  /* light washes — the only sanctioned gradients */
+  --field-blue: linear-gradient(
+    102deg,
+    rgba(47, 123, 255, 0.2),
+    rgba(47, 123, 255, 0.05) 55%,
+    transparent 78%
+  );
+  --field-red: linear-gradient(
+    -102deg,
+    rgba(255, 59, 59, 0.18),
+    rgba(255, 59, 59, 0.045) 55%,
+    transparent 78%
+  );
 
-  /* faction slots — provisional, changed centrally, never in components */
-  --faction-blue: var(--blue);
-  --faction-red: var(--red);
-  --faction-olive: var(--olive);
+  /* faction slots — components consume ONLY --faction-* via data layer */
+  --faction-blue: var(--police);
+  --faction-blue-hi: var(--police-hi);
+  --faction-red: var(--hazard);
+  --faction-red-hi: var(--hazard-hi);
+  --faction-olive: #93a05f;
+  --faction-olive-hi: #c2cc8f;
 
-  /* geometry: rectangular, 0–6px */
-  --radius-1: 3px;
-  --radius-2: 6px;
-
-  /* elevation for floating layers (menus) */
-  --shadow-float: 0 12px 32px rgba(3, 5, 8, 0.55), 0 2px 8px rgba(3, 5, 8, 0.4);
+  /* geometry: containers 0px; buttons/inputs/badges/menus 3px */
+  --r-ctl: 3px;
+  --seam-skew: -12deg;
 
   /* motion */
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   --ease-io: cubic-bezier(0.77, 0, 0.175, 1);
+  --dur-press: 140ms;
+  --dur-hover: 160ms;
+  --dur-panel: 220ms;
+  --dur-cine: 600ms;
+
+  /* z-scale */
+  --z-ticker: 20;
+  --z-sticky: 30;
+  --z-menu: 40;
+  --z-overlay: 50;
 }
 
 @theme inline {
-  --color-bg0: var(--bg-0);
-  --color-bg1: var(--bg-1);
+  --color-carbon0: var(--carbon-0);
+  --color-carbon1: var(--carbon-1);
+  --color-carbon2: var(--carbon-2);
+  --color-bg0: var(--carbon-0);
+  --color-bg1: var(--carbon-1);
   --color-panel: var(--layer-1);
   --color-raised: var(--layer-2);
   --color-line: var(--line-1);
   --color-line2: var(--line-2);
-  --color-line3: var(--line-3);
-  --color-inkline: var(--ink-line);
-  --color-ink: var(--text-1);
-  --color-dim: var(--text-2);
-  --color-faint: var(--text-3);
-  --color-red: var(--red);
-  --color-blue: var(--blue);
-  --color-bluebright: var(--blue-bright);
-  --color-olive: var(--olive);
-  --color-termgreen: var(--term-green);
-  --color-gold: var(--gold);
-  --color-success: var(--text-1);
-  --color-redbright: #ff6b6b;
-  --color-warning: var(--gold);
+  --color-line3: var(--line-2);
+  --color-inkline: var(--ink);
+  --color-ink: var(--ink);
+  --color-dim: var(--dim);
+  --color-faint: var(--faint);
+  --color-red: var(--hazard);
+  --color-redbright: var(--hazard-hi);
+  --color-blue: var(--police);
+  --color-bluebright: var(--police-hi);
+  --color-olive: var(--faction-olive);
+  --color-termgreen: var(--live);
+  --color-gold: var(--amber);
+  --color-success: var(--ink);
+  --color-warning: var(--amber);
   --font-sans: var(--font-body), system-ui, sans-serif;
   --font-display: var(--font-display-face), var(--font-body), sans-serif;
   --font-mono: var(--font-mono-face), ui-monospace, monospace;
   --radius-sm: 3px;
-  --radius-DEFAULT: 4px;
-  --radius-md: 4px;
-  --radius-lg: 6px;
+  --radius-DEFAULT: 3px;
+  --radius-md: 3px;
+  --radius-lg: 3px;
 }
 
 /* ------------------------------------------------------------------ */
@@ -96,90 +114,86 @@
 
 html {
   height: 100%;
+  color-scheme: dark;
 }
 
 body {
-  background: var(--bg-0);
-  color: var(--text-1);
+  background: var(--carbon-0);
+  color: var(--ink);
   font-family: var(--font-body), system-ui, sans-serif;
   font-size: 14px;
-  line-height: 1.5;
-  min-height: 100%;
+  line-height: 1.55;
+  min-height: 100dvh;
   overflow-x: hidden;
+  touch-action: manipulation;
 }
 
-/* ambient city light: one fixed static layer, mounted once in layout */
-.ambient-light {
+/* stage lighting: opposing light entries, obeys the Light Law */
+.stage-light {
   position: fixed;
   inset: 0;
-  z-index: -1;
+  z-index: -2;
   pointer-events: none;
   background:
-    radial-gradient(56% 44% at 8% -8%, var(--wash-blue), transparent 70%),
-    radial-gradient(50% 40% at 96% -4%, var(--wash-red), transparent 70%),
-    radial-gradient(64% 44% at 50% 110%, rgba(63, 141, 255, 0.05), transparent 72%);
+    radial-gradient(48% 38% at -6% 4%, rgba(47, 123, 255, 0.1), transparent 70%),
+    radial-gradient(44% 36% at 106% 96%, rgba(255, 59, 59, 0.07), transparent 70%);
 }
 
-/* the hardline: a strip of light split between the two sides of the war */
-.hardline-strip {
-  height: 2px;
-  background: linear-gradient(
-    90deg,
-    var(--blue) 0%,
-    rgba(63, 141, 255, 0.25) 38%,
-    rgba(255, 47, 54, 0.25) 62%,
-    var(--red) 100%
-  );
-  box-shadow: 0 0 14px rgba(63, 141, 255, 0.35), 0 0 14px rgba(255, 47, 54, 0.35);
+/* city linework fades under the fold */
+.city-grid {
+  position: fixed;
+  inset: 0 0 auto 0;
+  height: 900px;
+  z-index: -1;
+  pointer-events: none;
+  color: rgba(205, 222, 255, 0.05);
+  mask-image: linear-gradient(#000 30%, transparent);
 }
 
-/* signature 45° cut on a hero corner */
-.cut {
-  clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 0 100%);
-}
-
-/* colored edge light on a panel flank */
-.edge-red {
-  box-shadow: inset 2px 0 0 var(--red), inset 8px 0 18px -10px rgba(255, 47, 54, 0.6);
-}
-.edge-blue {
-  box-shadow: inset 2px 0 0 var(--blue), inset 8px 0 18px -10px rgba(63, 141, 255, 0.6);
+/* mechanical grain, one fixed layer */
+.grain {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='128' height='128'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 128px 128px;
+  mix-blend-mode: overlay;
 }
 
 ::selection {
-  background: rgba(76, 154, 255, 0.32);
-  color: var(--text-1);
+  background: rgba(47, 123, 255, 0.35);
+  color: var(--ink);
 }
 
 input,
 textarea,
 select {
-  caret-color: var(--blue);
-  border-radius: var(--radius-1);
+  caret-color: var(--police);
+  border-radius: var(--r-ctl);
 }
 
 ::placeholder {
-  color: var(--text-3);
+  color: var(--faint);
   opacity: 1;
 }
 
 :focus-visible {
-  outline: 2px solid var(--blue);
+  outline: 2px solid var(--police);
   outline-offset: 2px;
-  border-radius: var(--radius-1);
 }
 
 * {
   scrollbar-width: thin;
-  scrollbar-color: var(--line-3) transparent;
+  scrollbar-color: var(--line-2) transparent;
 }
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--line-3);
-  border-radius: 4px;
+  background: var(--line-2);
 }
 ::-webkit-scrollbar-track {
   background: transparent;
@@ -189,140 +203,188 @@ select {
 /* Type system                                                         */
 /* ------------------------------------------------------------------ */
 
-/* macro display: tall condensed poster type (Oswald) */
+/* display: scores, mastheads, ghost numerals, wordmark — Tektur */
 .display {
   font-family: var(--font-display-face), sans-serif;
   text-transform: uppercase;
-  letter-spacing: 0.015em;
-  line-height: 0.92;
+  letter-spacing: 0.01em;
+  line-height: 0.9;
+  font-variant-numeric: tabular-nums;
   text-wrap: balance;
 }
 
-/* mono telemetry: metadata, labels, nav, numerals (JetBrains Mono) */
+/* mono chrome: tables, tickers, labels, timers, nav, tags */
 .tele {
   font-family: var(--font-mono-face), ui-monospace, monospace;
   text-transform: uppercase;
-  letter-spacing: 0.07em;
+  letter-spacing: 0.06em;
 }
 
 .tech-label {
   font-family: var(--font-mono-face), ui-monospace, monospace;
   font-size: 10.5px;
-  font-weight: 400;
-  letter-spacing: 0.12em;
+  font-weight: 500;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--text-3);
-}
-
-/* kicker: mono line opened by a red slash of light */
-.kicker {
-  font-family: var(--font-mono-face), ui-monospace, monospace;
-  font-size: 11px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--text-2);
-}
-.kicker::before {
-  content: "// ";
-  color: var(--red);
+  color: var(--faint);
 }
 
 .tnum {
   font-variant-numeric: tabular-nums;
-  letter-spacing: 0.02em;
 }
 
 /* ------------------------------------------------------------------ */
-/* Structure: layered panels, light rules                              */
+/* Signature: the on-air seam and the light fields                     */
 /* ------------------------------------------------------------------ */
 
-/* translucent interface layer over the substrate */
-.frame {
-  background: var(--layer-1);
-  border: 1px solid var(--line-2);
-  border-radius: var(--radius-2);
-  overflow: hidden;
+/* seam core: always ink-white, never a blue-red gradient */
+.seam-v {
+  position: relative;
 }
-
-/* floating layer: opaque, elevated (menus, popovers) */
-.menu {
-  background: #10141b;
-  border: 1px solid var(--line-2);
-  border-radius: var(--radius-2);
-  box-shadow: var(--shadow-float);
-  overflow: hidden;
-}
-
-/* seamed grid of cells inside one layer */
-.grid-seam {
-  display: grid;
-  gap: 1px;
-  background: var(--line-2);
-  border: 1px solid var(--line-2);
-  border-radius: var(--radius-2);
-  overflow: hidden;
-}
-.grid-seam > * {
-  background: #0d1016;
-}
-
-/* section rules: thin lines of light, not print bars */
-.rule-ink {
-  border-top: 1px solid var(--line-3);
-}
-.rule-red {
-  border-top: 1px solid rgba(255, 59, 48, 0.55);
-  box-shadow: 0 0 12px rgba(255, 59, 48, 0.18);
-}
-.rule-blue {
-  border-top: 1px solid rgba(76, 154, 255, 0.55);
-  box-shadow: 0 0 12px rgba(76, 154, 255, 0.18);
-}
-
-/* hero light: red/blue washes on an identity surface (overlay layer) */
-.hero-light {
+.seam-v::after {
+  content: "";
   position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background:
-    radial-gradient(46% 90% at 0% 0%, rgba(76, 154, 255, 0.1), transparent 70%),
-    radial-gradient(42% 86% at 100% 0%, rgba(255, 59, 48, 0.08), transparent 70%);
+  inset: 0 auto 0 50%;
+  width: 2px;
+  background: var(--ink);
+  transform: skewX(var(--seam-skew));
+  box-shadow:
+    -6px 0 18px rgba(47, 123, 255, 0.5),
+    6px 0 18px rgba(255, 59, 59, 0.5);
 }
 
-/* hazard stripes — reserved for error surfaces only */
-.stripes-red {
-  background-image: repeating-linear-gradient(
-    -45deg,
-    var(--red) 0 8px,
-    transparent 8px 16px
+/* light fields — blue enters LEFT, red enters RIGHT (Light Law) */
+.field-blue {
+  background-image: var(--field-blue);
+}
+.field-red {
+  background-image: var(--field-red);
+}
+/* olive is the flexible flank: a direction per side */
+.field-olive-l {
+  background-image: linear-gradient(
+    102deg,
+    rgba(147, 160, 95, 0.16),
+    rgba(147, 160, 95, 0.04) 55%,
+    transparent 78%
+  );
+}
+.field-olive-r {
+  background-image: linear-gradient(
+    -102deg,
+    rgba(147, 160, 95, 0.16),
+    rgba(147, 160, 95, 0.04) 55%,
+    transparent 78%
   );
 }
 
-/* live indicator — the ONLY terminal-green element; a point of light */
+/* the plate: broadcast lower-third chrome */
+.plate {
+  background: var(--layer-1);
+  border: 1px solid var(--line-1);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+.plate--cut {
+  clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 0 100%);
+}
+
+/* double bezel: outer shell + raised core for hero modules */
+.bezel {
+  background: var(--layer-1);
+  border: 1px solid var(--line-1);
+  padding: 6px;
+}
+.bezel > .bezel-core {
+  background: var(--carbon-2);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  height: 100%;
+}
+
+/* faction rail: 3px leading edge in faction light */
+.rail-blue {
+  box-shadow: inset 3px 0 0 var(--faction-blue);
+}
+.rail-red {
+  box-shadow: inset 3px 0 0 var(--faction-red);
+}
+.rail-olive {
+  box-shadow: inset 3px 0 0 var(--faction-olive);
+}
+.rail-amber {
+  box-shadow: inset 3px 0 0 var(--amber);
+}
+
+/* opaque floating layer: menus, popovers */
+.menu {
+  background: var(--carbon-1);
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-ctl);
+  box-shadow: 0 12px 32px rgba(2, 4, 8, 0.6);
+  overflow: hidden;
+}
+
+/* wordmark plate: ink slab, right edge on the seam angle */
+.wordmark-plate {
+  display: inline-block;
+  background: var(--ink);
+  color: var(--carbon-0);
+  padding: 4px 10px;
+  clip-path: polygon(0 0, calc(100% - 5px) 0, 100% 100%, 0 100%);
+}
+
+/* hazard stripes — the ONLY use is the error-state top strip */
+.stripes-hazard {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    var(--hazard) 0 6px,
+    transparent 6px 12px
+  );
+  opacity: 0.25;
+}
+
+/* live square — the only green, the only ambient pulse */
 @keyframes live-pulse {
   0%,
   100% {
     opacity: 1;
   }
   50% {
-    opacity: 0.35;
+    opacity: 0.5;
   }
 }
 .live-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--term-green);
-  box-shadow: 0 0 8px rgba(60, 224, 122, 0.6);
+  width: 6px;
+  height: 6px;
+  background: var(--live);
   animation: live-pulse 2.2s var(--ease-io) infinite;
 }
 .live-dot--red {
-  background: var(--red);
-  box-shadow: 0 0 8px rgba(255, 59, 48, 0.55);
+  background: var(--hazard);
 }
 .live-dot--blue {
-  background: var(--blue);
-  box-shadow: 0 0 8px rgba(76, 154, 255, 0.55);
+  background: var(--police);
+}
+
+/* ------------------------------------------------------------------ */
+/* Ticker: one marquee per site                                        */
+/* ------------------------------------------------------------------ */
+
+@keyframes ticker-run {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.ticker-track {
+  display: inline-flex;
+  white-space: nowrap;
+  animation: ticker-run 60s linear infinite;
+  will-change: transform;
+}
+.ticker-viewport:hover .ticker-track {
+  animation-play-state: paused;
 }
 
 /* ------------------------------------------------------------------ */
@@ -331,10 +393,10 @@ select {
 
 .reveal {
   opacity: 0;
-  transform: translateY(14px);
+  transform: translateY(8px);
   transition:
-    opacity 0.6s var(--ease-out),
-    transform 0.6s var(--ease-out);
+    opacity var(--dur-cine) var(--ease-out),
+    transform var(--dur-cine) var(--ease-out);
   transition-delay: var(--d, 0ms);
 }
 .reveal[data-shown="true"] {
@@ -342,19 +404,56 @@ select {
   transform: translateY(0);
 }
 
+/* signal-acquisition wipe for the hero light fields */
+.wipe-l,
+.wipe-r {
+  animation: none;
+}
+[data-acquire="true"] .wipe-l {
+  animation: wipe-in-l 500ms var(--ease-out) both;
+  animation-delay: 80ms;
+}
+[data-acquire="true"] .wipe-r {
+  animation: wipe-in-r 500ms var(--ease-out) both;
+  animation-delay: 80ms;
+}
+@keyframes wipe-in-l {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0);
+  }
+}
+@keyframes wipe-in-r {
+  from {
+    clip-path: inset(0 0 0 100%);
+  }
+  to {
+    clip-path: inset(0);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .live-dot {
     animation: none;
   }
+  .ticker-track {
+    animation: none;
+  }
+  [data-acquire="true"] .wipe-l,
+  [data-acquire="true"] .wipe-r {
+    animation: none;
+  }
   .reveal {
-    transition: opacity 0.2s ease;
+    transition: opacity 150ms ease;
     transform: none;
     opacity: 1;
   }
 }
 
 /* ------------------------------------------------------------------ */
-/* Data tables: dense telemetry on one layer                           */
+/* Data tables: broadcast telemetry                                    */
 /* ------------------------------------------------------------------ */
 
 .data-table {
@@ -363,19 +462,18 @@ select {
 }
 .data-table th {
   font-family: var(--font-mono-face), ui-monospace, monospace;
-  font-size: 10px;
+  font-size: 10.5px;
   font-weight: 500;
-  letter-spacing: 0.09em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--text-3);
+  color: var(--faint);
   text-align: left;
-  padding: 8px 12px;
+  padding: 9px 12px;
   border-bottom: 1px solid var(--line-2);
-  background: var(--layer-1);
   white-space: nowrap;
 }
 .data-table td {
-  padding: 8px 12px;
+  padding: 9px 12px;
   border-bottom: 1px solid var(--line-1);
   font-size: 13px;
   vertical-align: middle;
@@ -384,7 +482,7 @@ select {
   border-bottom: none;
 }
 .data-table tbody tr {
-  transition: background-color 120ms var(--ease-out);
+  transition: background-color var(--dur-hover) var(--ease-out);
 }
 .data-table tbody tr:hover {
   background: var(--layer-2);
@@ -393,7 +491,8 @@ select {
   text-align: right;
   font-variant-numeric: tabular-nums;
   font-family: var(--font-mono-face), monospace;
-  font-size: 12px;
+  font-size: 12.5px;
+  font-weight: 500;
 }
 
 .row-link {
@@ -405,65 +504,73 @@ select {
 /* Controls                                                            */
 /* ------------------------------------------------------------------ */
 
-/* quiet layered control; press acknowledges instantly */
 .ctrl {
   font-family: var(--font-mono-face), ui-monospace, monospace;
+  font-size: 12px;
+  font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.08em;
+  height: 36px;
+  padding: 0 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   border: 1px solid var(--line-2);
-  border-radius: var(--radius-1);
-  color: var(--text-1);
+  border-radius: var(--r-ctl);
+  color: var(--ink);
   background: var(--layer-1);
   transition:
-    background-color 140ms var(--ease-out),
-    color 140ms var(--ease-out),
-    border-color 140ms var(--ease-out),
-    transform 140ms var(--ease-out);
+    background-color var(--dur-hover) var(--ease-out),
+    color var(--dur-hover) var(--ease-out),
+    border-color var(--dur-hover) var(--ease-out),
+    transform var(--dur-press) var(--ease-out);
 }
-.ctrl:hover {
-  background: var(--layer-2);
-  border-color: var(--line-3);
+@media (hover: hover) and (pointer: fine) {
+  .ctrl:hover {
+    background: var(--layer-2);
+  }
 }
 .ctrl:active {
-  transform: scale(0.98);
+  transform: scale(0.97);
 }
 
-/* solid primary — neutral ink fill; red/blue stay light, never a fill */
 .ctrl--primary {
-  background: var(--text-1);
-  border-color: var(--text-1);
-  color: var(--bg-0);
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--carbon-0);
 }
-.ctrl--primary:hover {
-  background: #ffffff;
-  border-color: #ffffff;
-  color: var(--bg-0);
+@media (hover: hover) and (pointer: fine) {
+  .ctrl--primary:hover {
+    background: #ffffff;
+    border-color: #ffffff;
+    color: var(--carbon-0);
+  }
 }
 
-/* hazard control: red as signal on the edge, not as fill */
-.ctrl--red {
-  border-color: rgba(255, 59, 48, 0.5);
-  color: var(--red);
-  background: rgba(255, 59, 48, 0.06);
+/* hazard: destructive only — red on the edge, never a fill */
+.ctrl--hazard {
+  border-color: rgba(255, 59, 59, 0.5);
+  color: var(--hazard-hi);
+  background: rgba(255, 59, 59, 0.06);
 }
-.ctrl--red:hover {
-  background: rgba(255, 59, 48, 0.12);
-  border-color: var(--red);
-  color: #ff6b62;
+@media (hover: hover) and (pointer: fine) {
+  .ctrl--hazard:hover {
+    background: rgba(255, 59, 59, 0.12);
+  }
 }
 
 .pressable {
   transition:
-    transform 140ms var(--ease-out),
-    background-color 140ms var(--ease-out),
-    border-color 140ms var(--ease-out),
-    color 140ms var(--ease-out);
+    transform var(--dur-press) var(--ease-out),
+    background-color var(--dur-hover) var(--ease-out),
+    border-color var(--dur-hover) var(--ease-out),
+    color var(--dur-hover) var(--ease-out);
 }
 .pressable:active {
-  transform: scale(0.98);
+  transform: scale(0.97);
 }
 
-/* nav item: red light strike for the active section */
+/* nav underline: police-blue light strike */
 .nav-item {
   position: relative;
 }
@@ -474,15 +581,65 @@ select {
   right: 10px;
   bottom: 0;
   height: 2px;
-  background: var(--red);
-  box-shadow: 0 0 8px rgba(255, 59, 48, 0.5);
+  background: var(--police);
+  box-shadow: 0 0 8px rgba(47, 123, 255, 0.6);
   transform: scaleX(0);
   transform-origin: left;
-  transition: transform 160ms var(--ease-out);
+  transition: transform var(--dur-hover) var(--ease-out);
 }
-.nav-item:hover::after {
-  transform: scaleX(0.55);
+@media (hover: hover) and (pointer: fine) {
+  .nav-item:hover::after {
+    transform: scaleX(1);
+  }
 }
 .nav-item[data-active="true"]::after {
   transform: scaleX(1);
+}
+
+/* segmented control cells */
+.seg {
+  font-family: var(--font-mono-face), ui-monospace, monospace;
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  padding: 0 12px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  color: var(--dim);
+  border-right: 1px solid var(--line-1);
+  transition:
+    background-color var(--dur-hover) var(--ease-out),
+    color var(--dur-hover) var(--ease-out);
+}
+.seg[data-active="true"] {
+  color: var(--ink);
+  background-image: var(--field-blue);
+}
+@media (hover: hover) and (pointer: fine) {
+  .seg:hover {
+    color: var(--ink);
+  }
+}
+
+/* skeleton pulse */
+@keyframes skeleton-pulse {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 0.85;
+  }
+}
+.skeleton {
+  background: var(--layer-2);
+  animation: skeleton-pulse 1.6s var(--ease-io) infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .skeleton {
+    animation: none;
+    opacity: 0.6;
+  }
 }

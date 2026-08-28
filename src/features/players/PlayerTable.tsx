@@ -3,10 +3,14 @@ import { Avatar } from "@/components/ui/Avatar";
 import { EmptyState } from "@/components/ui/states";
 import { catalogService, clanService } from "@/services";
 import { cn } from "@/lib/cn";
+import { factionTextHi } from "@/lib/factions";
 import { kd, num, pct } from "@/lib/format";
 import type { Faction, LeaderboardEntry } from "@/types";
 
-/** Player ranking table — the game's ladder, not an admin grid. */
+/**
+ * The ladder, Battlelog-tight: 40px rows, mono numerals, the rating as
+ * the loudest cell, win % riding its own 2px bar, full-row links.
+ */
 export async function PlayerTable({
   entries,
   variant = "full",
@@ -17,7 +21,13 @@ export async function PlayerTable({
   highlightPlayerId?: string;
 }) {
   if (entries.length === 0) {
-    return <EmptyState title="Игроки не найдены" hint="Попробуйте изменить фильтры или запрос." />;
+    return (
+      <EmptyState
+        title="Нет данных за период"
+        hint="Попробуйте изменить фильтры или запрос."
+        action={{ href: "/players", label: "СБРОСИТЬ ФИЛЬТРЫ" }}
+      />
+    );
   }
   const [units, clans, factions] = await Promise.all([
     catalogService.units(),
@@ -28,20 +38,21 @@ export async function PlayerTable({
   const unitName = (id: string) => units.find((u) => u.id === id)?.name ?? "—";
   const factionOf = (id: string): Faction => factions.find((f) => f.id === id)!;
   const full = variant === "full";
+  const maxWr = Math.max(...entries.map((e) => e.stats.winRate), 0.0001);
 
   return (
     <div className="overflow-x-auto">
       <table className="data-table">
         <thead>
           <tr>
-            <th className="w-[44px] !text-right">#</th>
-            <th>Игрок</th>
+            <th className="w-[48px] !text-right">Ранг</th>
+            <th>Оперативник</th>
+            <th>Фракция</th>
             <th className="!text-right">Рейтинг</th>
-            <th className="!text-right">Победы</th>
+            <th className="w-[120px] !text-right">Победы</th>
+            {full && <th className="!text-right">К-Д</th>}
             {full && <th className="!text-right">Матчи</th>}
-            {full && <th className="!text-right">K/D</th>}
-            {full && <th className="!text-right">Очки</th>}
-            {full && <th className="hidden lg:table-cell">Любимый юнит</th>}
+            {full && <th className="hidden xl:table-cell">Юнит</th>}
           </tr>
         </thead>
         <tbody>
@@ -50,35 +61,48 @@ export async function PlayerTable({
             const tag = clanTag(e.player.clanId);
             const isMe = e.player.id === highlightPlayerId;
             return (
-              <tr key={e.player.id} className={cn("relative", isMe && "bg-[rgba(76,154,255,0.07)]")}>
-                <td className="num font-mono text-[12px] text-faint">{e.rank}</td>
+              <tr key={e.player.id} className={cn("relative h-[40px]", isMe && "bg-[rgba(47,123,255,0.07)]")}>
+                <td className="num !text-[11.5px] text-faint">{e.rank}</td>
                 <td>
                   <div className="flex items-center gap-2.5">
-                    <Avatar seed={e.player.id} tone={f.colorToken} size={26} />
+                    <Avatar seed={e.player.id} label={e.player.username} tone={f.colorToken} size={24} />
                     <div className="min-w-0 leading-tight">
                       <Link
                         href={`/players/${e.player.id}`}
-                        className="font-semibold text-ink transition-colors hover:text-bluebright"
+                        className="font-mono text-[12.5px] font-bold text-ink transition-colors hover:text-[color:var(--police-hi)]"
+                        translate="no"
                       >
                         {e.player.username}
-                        {tag ? <span className="ml-1.5 font-mono text-[11px] font-normal text-faint">[{tag}]</span> : null}
+                        {tag ? <span className="ml-1.5 font-normal text-faint">[{tag}]</span> : null}
                       </Link>
-                      <p className="tech-label !text-[10px]">
+                      <p className="tech-label !text-[9.5px]">
                         {e.player.rankTitle} · ур {e.player.level}
                       </p>
                     </div>
                   </div>
                 </td>
-                <td className="num font-semibold text-ink">{num(e.player.rating)}</td>
-                <td className="num text-dim">{pct(e.stats.winRate)}</td>
-                {full && <td className="num text-dim">{num(e.stats.matches)}</td>}
+                <td>
+                  <span className={cn("tele text-[10.5px] font-bold", factionTextHi[f.colorToken])}>
+                    {f.code}
+                  </span>
+                </td>
+                <td className="num !text-[15px] !font-bold text-ink">{num(e.player.rating)}</td>
+                <td className="num text-dim">
+                  <span className="tnum">{pct(e.stats.winRate, 1)}</span>
+                  <span className="mt-1 block h-[2px] w-full bg-[color:var(--line-1)]" aria-hidden>
+                    <span
+                      className="block h-full bg-[color:var(--dim)]"
+                      style={{ width: `${(e.stats.winRate / maxWr) * 100}%` }}
+                    />
+                  </span>
+                </td>
                 {full && <td className="num text-dim">{kd(e.stats.kd)}</td>}
-                {full && <td className="num text-dim">{num(e.stats.totalScore)}</td>}
+                {full && <td className="num text-dim">{num(e.stats.matches)}</td>}
                 {full && (
-                  <td className="hidden lg:table-cell">
+                  <td className="hidden xl:table-cell">
                     <Link
                       href={`/units/${e.favoriteUnitId}`}
-                      className="text-[12.5px] text-dim transition-colors hover:text-bluebright"
+                      className="text-[12px] text-dim transition-colors hover:text-[color:var(--police-hi)]"
                     >
                       {unitName(e.favoriteUnitId)}
                     </Link>

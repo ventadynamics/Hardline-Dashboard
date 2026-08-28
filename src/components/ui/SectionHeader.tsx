@@ -2,8 +2,9 @@ import { cn } from "@/lib/cn";
 import type { ReactNode } from "react";
 
 /**
- * Section header: a slanted tick of colored light, condensed display
- * title, meta hanging right. A hairline closes the row.
+ * Section identity is the headline itself: D3 display title left-aligned,
+ * a 1px rule running from its right edge to the column edge, meta riding
+ * the rule. Accent = faction light on the leading tick.
  */
 export function SectionHeader({
   title,
@@ -17,23 +18,23 @@ export function SectionHeader({
   className?: string;
 }) {
   return (
-    <div className={cn("mb-3.5", className)}>
-      <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-        <h2 className="display flex items-center gap-2.5 text-[17px] font-semibold text-ink">
+    <div className={cn("mb-4 flex items-baseline gap-4", className)}>
+      <h2 className="display flex shrink-0 items-center gap-2.5 text-[24px] font-bold text-ink">
+        {accent !== "none" ? (
           <span
             aria-hidden
             className={cn(
-              "h-[14px] w-[5px] -skew-x-[18deg]",
-              accent === "red" && "bg-red shadow-[0_0_10px_rgba(255,47,54,0.55)]",
-              accent === "blue" && "bg-blue shadow-[0_0_10px_rgba(63,141,255,0.55)]",
-              (accent === "ink" || accent === "none") && "bg-inkline",
+              "h-[16px] w-[5px] -skew-x-[12deg]",
+              accent === "red" && "bg-[color:var(--hazard)] shadow-[0_0_10px_rgba(255,59,59,0.5)]",
+              accent === "blue" && "bg-[color:var(--police)] shadow-[0_0_10px_rgba(47,123,255,0.5)]",
+              accent === "ink" && "bg-ink",
             )}
           />
-          {title}
-        </h2>
-        {meta ? <div className="tele flex items-center gap-3 text-[10.5px] text-dim">{meta}</div> : null}
-      </div>
-      <div className="mt-2 border-t border-line" aria-hidden />
+        ) : null}
+        {title}
+      </h2>
+      <div className="min-w-6 flex-1 self-center border-t border-line2" aria-hidden />
+      {meta ? <div className="tele flex shrink-0 items-center gap-3 text-[10.5px] text-dim">{meta}</div> : null}
     </div>
   );
 }

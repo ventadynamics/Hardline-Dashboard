@@ -1,7 +1,7 @@
 import { cn } from "@/lib/cn";
 import type { ReactNode } from "react";
 
-/** Framed compartment: solid substrate, visible 1px boundary, 90-degree. */
+/** Plate compartment: translucent layer, hairline, inset top light. */
 export function Panel({
   children,
   className,
@@ -9,9 +9,7 @@ export function Panel({
 }: {
   children: ReactNode;
   className?: string;
-  glass?: boolean;
-  corners?: boolean;
   padded?: boolean;
 }) {
-  return <div className={cn("frame", padded && "p-4", className)}>{children}</div>;
+  return <div className={cn("plate", padded && "p-4", className)}>{children}</div>;
 }

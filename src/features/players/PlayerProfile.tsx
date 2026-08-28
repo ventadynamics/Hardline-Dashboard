@@ -2,28 +2,21 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Avatar } from "@/components/ui/Avatar";
 import { FactionTag } from "@/components/ui/badges";
-import { AreaChart, ActivityBars } from "@/components/ui/charts";
+import { ActivityBars, StepChart } from "@/components/ui/charts";
 import { Panel } from "@/components/ui/Panel";
 import { SectionHeader } from "@/components/ui/SectionHeader";
+import { SegmentedLinks } from "@/components/ui/Segmented";
 import { EmptyState } from "@/components/ui/states";
 import { MatchList } from "@/features/matches/MatchList";
 import { cn } from "@/lib/cn";
+import { factionRail, fieldFor } from "@/lib/factions";
 import { kd as fmtKd, num, pct, shortDate } from "@/lib/format";
 import { catalogService, clanService, playerService } from "@/services";
 import type { SliceStat } from "@/types";
 
-function StatCell({ label, value, accent }: { label: string; value: string; accent?: boolean }) {
-  return (
-    <div className="px-4 py-3.5">
-      <p className="tech-label">{label}</p>
-      <p className={cn("tnum display mt-1.5 text-[27px] font-semibold leading-none", accent ? "text-bluebright" : "text-ink")}>
-        {value}
-      </p>
-    </div>
-  );
-}
+type BreakdownKind = "faction" | "map" | "mode";
 
-async function SliceTable({ title, slices, kind }: { title: string; slices: SliceStat[]; kind: "faction" | "map" | "mode" }) {
+async function SliceTable({ slices, kind }: { slices: SliceStat[]; kind: BreakdownKind }) {
   const [factions, maps, modes] = await Promise.all([
     catalogService.factions(),
     catalogService.maps(),
@@ -35,228 +28,264 @@ async function SliceTable({ title, slices, kind }: { title: string; slices: Slic
       : kind === "map"
         ? maps.find((m) => m.id === id)?.name ?? id
         : modes.find((m) => m.id === id)?.name ?? id;
+  if (slices.length === 0) {
+    return <p className="px-4 py-5 text-[12.5px] text-faint">Нет матчей за период.</p>;
+  }
   return (
-    <div className="frame">
-      <p className="tech-label border-b border-line2 bg-[color:var(--layer-1)] px-3.5 py-2.5">{title}</p>
-      {slices.length === 0 ? (
-        <p className="px-3.5 py-4 text-[12.5px] text-faint">Нет матчей за период.</p>
-      ) : (
-        <table className="data-table">
-          <thead>
-            <tr>
-              <th>—</th>
-              <th className="!text-right">Матчи</th>
-              <th className="!text-right">Победы</th>
-              <th className="!text-right">Ср. очки</th>
-            </tr>
-          </thead>
-          <tbody>
-            {slices.slice(0, 5).map((s) => (
-              <tr key={s.refId}>
-                <td className="text-[12.5px] text-ink">{name(s.refId)}</td>
-                <td className="num text-dim">{s.matches}</td>
-                <td className="num text-dim">{pct(s.winRate)}</td>
-                <td className="num text-dim">{num(s.avgScore)}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
-    </div>
+    <table className="data-table">
+      <thead>
+        <tr>
+          <th>—</th>
+          <th className="!text-right">Матчи</th>
+          <th className="!text-right">Победы</th>
+          <th className="!text-right">Ср. очки</th>
+        </tr>
+      </thead>
+      <tbody>
+        {slices.slice(0, 5).map((s) => (
+          <tr key={s.refId}>
+            <td className="text-[12.5px] text-ink">{name(s.refId)}</td>
+            <td className="num text-dim">{s.matches}</td>
+            <td className="num text-dim">{pct(s.winRate)}</td>
+            <td className="num text-dim">{num(s.avgScore)}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
   );
 }
 
-export async function PlayerProfile({ playerId, isSelf = false }: { playerId: string; isSelf?: boolean }) {
+export async function PlayerProfile({
+  playerId,
+  isSelf = false,
+  breakdown = "faction",
+  basePath,
+}: {
+  playerId: string;
+  isSelf?: boolean;
+  breakdown?: string;
+  basePath: string;
+}) {
   const [player, stats] = await Promise.all([
     playerService.byId(playerId),
     playerService.stats(playerId),
   ]);
   if (!player || !stats) notFound();
-  const [factions, units, maps, clans, recent] = await Promise.all([
+  const [factions, units, maps, clans, recent, { entries }] = await Promise.all([
     catalogService.factions(),
     catalogService.units(),
     catalogService.maps(),
     clanService.leaderboard(),
     playerService.recentMatches(playerId, 8),
+    playerService.leaderboard({ limit: 500 }),
   ]);
   const faction = factions.find((f) => f.id === player.factionId)!;
   const clanEntry = clans.find((c) => c.clan.id === player.clanId);
   const favUnit = units.find((u) => u.id === stats.favoriteUnitId);
   const favMap = maps.find((m) => m.id === stats.favoriteMapId);
+  const rank = entries.find((e) => e.player.id === playerId)?.rank;
+  const hist = stats.ratingHistory;
+  const delta = hist.length > 1 ? hist[hist.length - 1].rating - hist[0].rating : 0;
   const presence =
     player.presence === "online" ? "В СЕТИ" : player.presence === "ingame" ? "В МАТЧЕ" : "НЕ В СЕТИ";
+  const kind: BreakdownKind = breakdown === "map" ? "map" : breakdown === "mode" ? "mode" : "faction";
+  const slices = kind === "map" ? stats.byMap : kind === "mode" ? stats.byMode : stats.byFaction;
 
   return (
-    <div className="mx-auto max-w-[1360px] space-y-10 px-4 py-8 sm:px-6">
-      {/* identity strip */}
-      <section className="frame cut relative">
-        <div className="hero-light" aria-hidden />
-        <div className="relative flex flex-col gap-6 p-5 sm:p-6 lg:flex-row lg:items-center lg:justify-between">
-          <div className="flex items-center gap-5">
-            <Avatar seed={player.id} tone={faction.colorToken} size={72} />
-            <div>
-              <div className="flex flex-wrap items-baseline gap-2.5">
-                <h1 className="display text-[clamp(34px,3.6vw,46px)] font-semibold leading-none text-ink">
-                  {player.username}
-                </h1>
-                {clanEntry ? (
-                  <Link href={`/clans/${clanEntry.clan.id}`} className="font-mono text-[13px] text-faint transition-colors hover:text-bluebright">
-                    [{clanEntry.clan.tag}]
-                  </Link>
-                ) : null}
-                {isSelf ? (
-                  <span className="tele rounded-sm border border-[rgba(76,154,255,0.45)] bg-[rgba(76,154,255,0.1)] px-1.5 py-[3px] text-[10px] font-bold text-bluebright">
-                    ЭТО ВЫ
-                  </span>
-                ) : null}
-              </div>
-              <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1.5">
-                <span className="tech-label">
-                  {player.rankTitle} · уровень {player.level}
-                </span>
-                <FactionTag faction={faction} full />
-                <span className="flex items-center gap-1.5">
-                  <span
-                    className={cn(
-                      "live-dot !h-[5px] !w-[5px]",
-                      player.presence === "offline" && "!animate-none !bg-line3 !shadow-none",
-                      player.presence === "ingame" && "live-dot--red",
-                    )}
-                    aria-hidden
-                  />
-                  <span className="tech-label">{presence}</span>
-                </span>
-                <span className="font-mono text-[11px] text-faint">в игре с {shortDate(player.createdAt)}</span>
-              </div>
-            </div>
-          </div>
-          <div className="flex items-center gap-8">
-            <div className="text-right">
-              <p className="tech-label">Рейтинг</p>
-              <p className="display tnum text-[40px] font-semibold leading-none text-ink">{num(player.rating)}</p>
-            </div>
-            <div className="hidden h-[52px] w-px bg-line2 sm:block" aria-hidden />
-            <div className="tnum grid grid-cols-3 gap-x-7 text-right">
-              <div>
-                <p className="tech-label">Победы</p>
-                <p className="display mt-1 text-[19px] font-semibold leading-none text-ink">{pct(stats.winRate)}</p>
-              </div>
-              <div>
-                <p className="tech-label">K/D</p>
-                <p className="display mt-1 text-[19px] font-semibold leading-none text-ink">{fmtKd(stats.kd)}</p>
-              </div>
-              <div>
-                <p className="tech-label">Матчи</p>
-                <p className="display mt-1 text-[19px] font-semibold leading-none text-ink">{num(stats.matches)}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* charts */}
-      <section className="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] lg:gap-10">
-        <div>
-          <SectionHeader title="Динамика рейтинга" meta={<span className="font-mono text-[11px] text-faint">30 дней</span>} />
-          <Panel>
-            <AreaChart
-              ariaLabel={`Рейтинг игрока ${player.username} за 30 дней`}
-              points={stats.ratingHistory.map((p) => ({ label: shortDate(p.date), value: p.rating }))}
-              tone="blue"
-              height={170}
-            />
-          </Panel>
-        </div>
-        <div>
-          <SectionHeader title="Активность" meta={<span className="font-mono text-[11px] text-faint">14 дней</span>} />
-          <Panel>
-            <ActivityBars
-              data={stats.activity.map((a) => ({ label: shortDate(a.date), value: a.matches }))}
-              tone="red"
-            />
-            <p className="mt-2 text-[12px] text-faint">
-              Матчей за период: {stats.activity.reduce((s, a) => s + a.matches, 0)}
-            </p>
-          </Panel>
-        </div>
-      </section>
-
-      {/* career numbers */}
-      <section>
-        <SectionHeader title="Карьера" />
-        <div className="grid-seam grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8">
-          <StatCell label="Всего очков" value={num(stats.totalScore)} accent />
-          <StatCell label="Ср. очки за матч" value={num(stats.avgScore)} />
-          <StatCell label="Побед" value={num(stats.wins)} />
-          <StatCell label="Поражений" value={num(stats.losses)} />
-          <StatCell label="Уничтожено" value={num(stats.kills)} />
-          <StatCell label="Потеряно" value={num(stats.deaths)} />
-          <StatCell label="Содействий" value={num(stats.assists)} />
-          <StatCell label="Точек захвачено" value={num(stats.objectivesCaptured)} />
-        </div>
-        <div className="grid-seam mt-2 grid grid-cols-1 sm:grid-cols-3">
-          <div className="px-4 py-3.5">
-            <p className="tech-label">Любимый юнит</p>
-            {favUnit ? (
-              <Link href={`/units/${favUnit.id}`} className="display mt-1.5 inline-block text-[15px] font-semibold text-ink transition-colors hover:text-bluebright">
-                {favUnit.name}
-              </Link>
-            ) : (
-              <p className="mt-1.5 text-dim">—</p>
-            )}
-          </div>
-          <div className="px-4 py-3.5">
-            <p className="tech-label">Любимая карта</p>
-            {favMap ? (
-              <Link href={`/maps/${favMap.id}`} className="display mt-1.5 inline-block text-[15px] font-semibold text-ink transition-colors hover:text-bluebright">
-                {favMap.name}
-              </Link>
-            ) : (
-              <p className="mt-1.5 text-dim">—</p>
-            )}
-          </div>
-          <div className="px-4 py-3.5">
-            <p className="tech-label">Основная фракция</p>
-            <p className="mt-1.5">
-              <FactionTag faction={factions.find((f) => f.id === stats.favoriteFactionId) ?? faction} full />
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* slices */}
-      <section>
-        <SectionHeader title="Разбор за 30 дней" meta={<span className="font-mono text-[11px] text-faint">по недавним матчам</span>} />
-        {stats.byFaction.length === 0 && stats.byMap.length === 0 ? (
-          <EmptyState title="За последние 30 дней матчей не было" hint="Разбор появится после ближайших боёв." />
-        ) : (
-          <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-            <SliceTable title="По фракциям" slices={stats.byFaction} kind="faction" />
-            <SliceTable title="По картам" slices={stats.byMap} kind="map" />
-            <SliceTable title="По режимам" slices={stats.byMode} kind="mode" />
-          </div>
-        )}
-      </section>
-
-      {/* recent matches */}
-      <section>
-        <SectionHeader
-          title="Последние матчи"
-          meta={
-            <Link href="/matches" className="tech-label transition-colors hover:!text-bluebright">
-              все матчи
-            </Link>
-          }
+    <div className="pb-4">
+      {/* dossier masthead: the faction's light enters from the leading edge */}
+      <section className="relative overflow-hidden border-b border-line2">
+        <div
+          className={cn(
+            "pointer-events-none absolute inset-y-0 w-full sm:w-2/3",
+            faction.colorToken === "red" ? "right-0" : "left-0",
+            fieldFor(faction.colorToken, faction.colorToken === "red" ? "r" : "l"),
+          )}
+          aria-hidden
         />
-        <Panel padded={false}>
-          <MatchList
-            matches={recent}
-            showPerspective
-            emptyTitle="Недавних матчей нет"
-            emptyHint="За последние 30 дней игрок не выходил в бой."
-          />
-        </Panel>
+        <div className="relative mx-auto grid max-w-[1400px] grid-cols-1 items-center gap-6 px-4 py-8 sm:px-6 sm:py-10 lg:grid-cols-[auto_1fr_auto]">
+          <div className="bezel w-fit">
+            <div className={cn("bezel-core", factionRail[faction.colorToken])}>
+              <Avatar seed={player.id} label={player.username} tone={faction.colorToken} size={96} />
+            </div>
+          </div>
+          <div className="min-w-0">
+            <div className="flex flex-wrap items-baseline gap-3">
+              <h1 className="display text-[clamp(40px,5vw,72px)] font-bold text-ink" translate="no">
+                {player.username}
+              </h1>
+              {clanEntry ? (
+                <Link
+                  href={`/clans/${clanEntry.clan.id}`}
+                  className="font-mono text-[14px] text-faint transition-colors hover:text-[color:var(--police-hi)]"
+                >
+                  [{clanEntry.clan.tag}]
+                </Link>
+              ) : null}
+              {isSelf ? (
+                <span className="tele rounded-sm border border-[rgba(47,123,255,0.45)] px-2 py-[3px] text-[10px] font-bold text-[color:var(--police-hi)]">
+                  ЭТО ВЫ
+                </span>
+              ) : null}
+            </div>
+            <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2">
+              <span className="tech-label">
+                {player.rankTitle} · уровень {player.level}
+              </span>
+              <FactionTag faction={faction} full />
+              <span className="flex items-center gap-1.5">
+                <span
+                  className={cn(
+                    "live-dot !size-[5px]",
+                    player.presence === "offline" && "!animate-none !bg-[color:var(--line-2)]",
+                    player.presence === "ingame" && "live-dot--red",
+                  )}
+                  aria-hidden
+                />
+                <span className="tech-label">{presence}</span>
+              </span>
+              <span className="font-mono text-[11px] text-faint">в игре с {shortDate(player.createdAt)}</span>
+            </div>
+          </div>
+          <div className="text-left lg:text-right">
+            <p className="tech-label">Рейтинг</p>
+            <p className="display tnum text-[72px] font-black leading-none text-ink">{num(player.rating)}</p>
+            <p className="tnum mt-2 font-mono text-[11.5px] text-dim">
+              {rank ? `#${rank} в зачёте` : "вне зачёта"}
+              <span className={cn("ml-3", delta >= 0 ? "text-[color:var(--police-hi)]" : "text-[color:var(--hazard-hi)]")}>
+                {delta >= 0 ? "▲" : "▼"} {num(Math.abs(delta))} за 30 дней
+              </span>
+            </p>
+          </div>
+        </div>
       </section>
+
+      <div className="mx-auto mt-10 grid max-w-[1400px] grid-cols-1 items-start gap-x-8 gap-y-10 px-4 sm:px-6 lg:grid-cols-[1.4fr_1fr]">
+        {/* left: service record */}
+        <div className="space-y-10">
+          <section aria-label="Послужной список">
+            <SectionHeader title="Послужной список" accent="blue" />
+            <div className="plate grid grid-cols-3">
+              <div className="border-r border-line px-5 py-4">
+                <p className="tech-label">Победы</p>
+                <p className="display tnum mt-1.5 text-[32px] font-bold text-ink">{pct(stats.winRate, 1)}</p>
+                <p className="tnum mt-1 font-mono text-[10.5px] text-faint">
+                  {num(stats.wins)} - {num(stats.losses)}
+                </p>
+              </div>
+              <div className="border-r border-line px-5 py-4">
+                <p className="tech-label">К-Д</p>
+                <p className="display tnum mt-1.5 text-[32px] font-bold text-ink">{fmtKd(stats.kd)}</p>
+                <p className="tnum mt-1 font-mono text-[10.5px] text-faint">
+                  {num(stats.kills)} / {num(stats.deaths)}
+                </p>
+              </div>
+              <div className="px-5 py-4">
+                <p className="tech-label">Матчи</p>
+                <p className="display tnum mt-1.5 text-[32px] font-bold text-ink">{num(stats.matches)}</p>
+                <p className="tnum mt-1 font-mono text-[10.5px] text-faint">ср. очки {num(stats.avgScore)}</p>
+              </div>
+            </div>
+            <details className="plate group mt-3">
+              <summary className="tele cursor-pointer list-none px-5 py-3 text-[11px] font-bold text-dim transition-colors hover:text-ink">
+                ПОЛНАЯ СТАТИСТИКА
+                <span className="ml-2 inline-block transition-transform group-open:rotate-90" aria-hidden>›</span>
+              </summary>
+              <dl className="tnum grid grid-cols-1 gap-x-8 border-t border-line px-5 py-4 font-mono text-[12px] sm:grid-cols-2">
+                {(
+                  [
+                    ["Всего очков", num(stats.totalScore)],
+                    ["Содействий", num(stats.assists)],
+                    ["Точек захвачено", num(stats.objectivesCaptured)],
+                    ["Любимый юнит", favUnit?.name ?? "—"],
+                    ["Любимая карта", favMap?.name ?? "—"],
+                    ["Основная фракция", factions.find((f) => f.id === stats.favoriteFactionId)?.name ?? faction.name],
+                  ] as const
+                ).map(([k, v]) => (
+                  <div key={k} className="flex items-baseline justify-between gap-4 border-b border-line py-2 last:border-b-0 sm:[&:nth-last-child(2)]:border-b-0">
+                    <dt className="tech-label">{k}</dt>
+                    <dd className="text-ink">{v}</dd>
+                  </div>
+                ))}
+              </dl>
+            </details>
+          </section>
+
+          <section aria-label="История матчей">
+            <SectionHeader
+              title="История матчей"
+              meta={
+                <Link href="/matches" className="transition-colors hover:text-ink">
+                  все матчи
+                </Link>
+              }
+            />
+            <Panel padded={false}>
+              <MatchList
+                matches={recent}
+                showPerspective
+                groupByDay
+                emptyTitle="Недавних матчей нет"
+                emptyHint="За последние 30 дней игрок не выходил в бой."
+              />
+            </Panel>
+          </section>
+        </div>
+
+        {/* right rail: telemetry */}
+        <div className="space-y-10">
+          <section aria-label="Динамика рейтинга">
+            <SectionHeader title="Динамика" meta={<span>30 дней</span>} />
+            <Panel>
+              <StepChart
+                ariaLabel={`Рейтинг игрока ${player.username} за 30 дней`}
+                points={hist.map((p) => ({ label: shortDate(p.date), value: p.rating }))}
+                tone="blue"
+                height={200}
+              />
+            </Panel>
+          </section>
+
+          <section aria-label="Активность">
+            <SectionHeader title="Активность" meta={<span>14 дней</span>} />
+            <Panel>
+              <ActivityBars
+                data={stats.activity.map((a) => ({ label: shortDate(a.date), value: a.matches }))}
+                tone="red"
+              />
+              <p className="tnum mt-2 font-mono text-[11px] text-faint">
+                матчей за период: {stats.activity.reduce((s, a) => s + a.matches, 0)}
+              </p>
+            </Panel>
+          </section>
+
+          <section aria-label="Разбор за 30 дней">
+            <SectionHeader title="Разбор" meta={<span>30 дней</span>} />
+            {stats.byFaction.length === 0 && stats.byMap.length === 0 ? (
+              <EmptyState
+                title="Нет данных за период"
+                hint="Разбор появится после ближайших боёв."
+                action={{ href: "/matches", label: "К МАТЧАМ" }}
+              />
+            ) : (
+              <div className="plate">
+                <div className="border-b border-line2 p-2">
+                  <SegmentedLinks
+                    ariaLabel="Срез разбора"
+                    className="border-0"
+                    items={[
+                      { href: `${basePath}?breakdown=faction`, label: "ФРАКЦИИ", active: kind === "faction" },
+                      { href: `${basePath}?breakdown=map`, label: "КАРТЫ", active: kind === "map" },
+                      { href: `${basePath}?breakdown=mode`, label: "РЕЖИМЫ", active: kind === "mode" },
+                    ]}
+                  />
+                </div>
+                <SliceTable slices={slices} kind={kind} />
+              </div>
+            )}
+          </section>
+        </div>
+      </div>
     </div>
   );
 }

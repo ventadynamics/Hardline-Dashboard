@@ -3,15 +3,15 @@ import { cn } from "@/lib/cn";
 import type { ReactNode } from "react";
 
 const variants = {
-  /* solid ink fill — the one loud control; red/blue stay light, not fill */
+  /* ink slab — the one loud control; red/blue stay light, never a fill */
   primary: "ctrl ctrl--primary",
-  /* hazard edge: red as signal on the border, translucent body */
-  danger: "ctrl ctrl--red",
-  /* quiet layered control */
+  /* destructive only */
+  danger: "ctrl ctrl--hazard",
+  /* quiet chrome */
   ghost: "ctrl",
 } as const;
 
-/** Rectangular mono control on the layer system. Press acknowledges. */
+/** Broadcast control: 36px mono caps on a 3px-radius plate. */
 export function Btn({
   href,
   children,
@@ -24,14 +24,7 @@ export function Btn({
   className?: string;
 }) {
   return (
-    <Link
-      href={href}
-      className={cn(
-        "pressable inline-flex items-center gap-2 px-4 py-[9px] text-[11.5px] font-medium",
-        variants[variant],
-        className,
-      )}
-    >
+    <Link href={href} className={cn("pressable", variants[variant], className)}>
       {children}
     </Link>
   );
