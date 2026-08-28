@@ -9,8 +9,8 @@ export function Skeleton({ className }: { className?: string }) {
 
 export function TableSkeleton({ rows = 8 }: { rows?: number }) {
   return (
-    <div className="space-y-[9px] py-2" role="status" aria-label="Загрузка данных">
-      <p className="tech-label px-1">Загрузка данных…</p>
+    <div className="signal-sweep space-y-[9px] py-2" role="status" aria-label="Загрузка данных">
+      <p className="tech-label signal-label px-1">Поиск сигнала…</p>
       {Array.from({ length: rows }).map((_, i) => (
         <Skeleton key={i} className="h-[28px] w-full" />
       ))}

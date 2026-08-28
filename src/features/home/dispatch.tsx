@@ -107,8 +107,9 @@ export async function HeroScorebug() {
                 {l.faction.name}
               </p>
               <p
+                data-text={l.score}
                 className={cn(
-                  "display tnum text-[clamp(88px,11vw,168px)] font-black leading-[0.85]",
+                  "glitch-once display tnum text-[clamp(88px,11vw,168px)] font-black leading-[0.85]",
                   l.won ? "text-ink" : "text-dim",
                 )}
               >
@@ -141,8 +142,9 @@ export async function HeroScorebug() {
                 {r.faction.name}
               </p>
               <p
+                data-text={r.score}
                 className={cn(
-                  "display tnum text-[clamp(88px,11vw,168px)] font-black leading-[0.85]",
+                  "glitch-once display tnum text-[clamp(88px,11vw,168px)] font-black leading-[0.85]",
                   r.won ? "text-ink" : "text-dim",
                 )}
               >

@@ -28,7 +28,16 @@ export default function HomePage() {
 
       <h1 className="sr-only">HARDLINE — оперативная сводка</h1>
 
-      <Suspense fallback={<Skeleton className="h-[420px] w-full" />}>
+      <Suspense
+        fallback={
+          <div className="signal-sweep relative h-[420px] w-full border-b border-line2" role="status" aria-label="Загрузка эфира">
+            <Skeleton className="absolute inset-0 !bg-[color:var(--layer-1)]" />
+            <p className="tech-label signal-label absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+              Поиск сигнала…
+            </p>
+          </div>
+        }
+      >
         <HeroScorebug />
       </Suspense>
 
