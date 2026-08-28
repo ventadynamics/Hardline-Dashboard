@@ -2,8 +2,8 @@ import { cn } from "@/lib/cn";
 import type { ReactNode } from "react";
 
 /**
- * Operational unit header: a full-width structural rule, then ASCII-framed
- * mono title with meta hanging right on the same line.
+ * Operational unit header, stamp variant: a double typographic rule, then an
+ * inverted print stamp carrying the title, meta hanging right.
  */
 export function SectionHeader({
   title,
@@ -19,13 +19,9 @@ export function SectionHeader({
   return (
     <div className={cn("mb-3", className)}>
       <div className={accent === "red" ? "rule-red" : "rule-ink"} aria-hidden />
-      <div className="mt-2 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-        <h2 className="tele text-[13px] font-bold text-ink">
-          <span aria-hidden className="text-faint">[ </span>
-          {title}
-          <span aria-hidden className="text-faint"> ]</span>
-        </h2>
-        {meta ? <div className="tele flex items-center gap-3 text-[10.5px] text-dim">{meta}</div> : null}
+      <div className="mt-2.5 flex flex-wrap items-center justify-between gap-x-4 gap-y-1.5">
+        <h2 className={cn("stamp text-[11px]", accent === "red" && "stamp--red")}>{title}</h2>
+        {meta ? <div className="tele flex items-center gap-3 text-[10px] text-dim">{meta}</div> : null}
       </div>
     </div>
   );

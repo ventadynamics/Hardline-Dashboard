@@ -111,8 +111,8 @@ export async function LeftConsole() {
 
         {/* live telemetry stack */}
         <div data-fx className="frame">
-          <header className="flex items-center justify-between border-b border-line2 bg-raised px-4 py-2">
-            <h2 className="tele text-[11px] font-bold text-ink">Телеметрия</h2>
+          <header className="flex items-center justify-between border-b border-line2 px-4 py-2.5">
+            <h2 className="stamp !px-2 !py-[3px] text-[10px]">Телеметрия</h2>
             <Link href="/matches" className="tele text-[9.5px] text-faint transition-colors hover:text-ink">
               матчи
             </Link>

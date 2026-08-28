@@ -39,10 +39,9 @@ export function ResultBadge({ result }: { result: "win" | "loss" | "draw" }) {
   return (
     <span
       className={cn(
-        "tele inline-block border px-1.5 py-[3px] text-[10px] font-bold leading-none",
-        result === "win" && "border-ink text-ink",
-        result === "loss" && "border-[color:var(--red)] text-[color:var(--red)]",
-        result === "draw" && "border-line3 text-dim",
+        "stamp !px-1.5 !py-[3px] text-[9.5px] leading-none",
+        result === "loss" && "stamp--red",
+        result === "draw" && "stamp--outline",
       )}
     >
       {text}

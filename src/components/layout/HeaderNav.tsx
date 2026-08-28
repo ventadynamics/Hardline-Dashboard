@@ -105,7 +105,7 @@ export function HeaderNav({ user }: { user: HeaderUser }) {
               )}
             </button>
             {menu === "bell" && (
-              <div className="frame absolute right-0 top-[calc(100%+13px)] w-[320px] shadow-none">
+              <div className="frame absolute right-0 top-[calc(100%+13px)] w-[320px] !bg-[color:var(--bg-1)]">
                 <div className="flex items-center justify-between border-b border-line2 bg-raised px-3.5 py-2.5">
                   <span className="tech-label">Уведомления</span>
                   <span className="tnum font-mono text-[10.5px] text-faint">{unread} новых</span>
@@ -159,7 +159,7 @@ export function HeaderNav({ user }: { user: HeaderUser }) {
               <ChevronDown size={12} className="hidden text-faint sm:block" />
             </button>
             {menu === "account" && (
-              <div className="frame absolute right-0 top-[calc(100%+13px)] w-[210px]">
+              <div className="frame absolute right-0 top-[calc(100%+13px)] w-[210px] !bg-[color:var(--bg-1)]">
                 <Link href="/profile" className="flex items-center gap-2.5 px-3.5 py-2.5 text-[12.5px] text-ink transition-colors hover:bg-raised">
                   <UserRound size={13} strokeWidth={1.75} className="text-dim" /> Мой профиль
                 </Link>

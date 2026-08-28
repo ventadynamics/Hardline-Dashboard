@@ -18,7 +18,7 @@ export function ProgressBar({
   value,
   total,
   tone = "red",
-  segments = 14,
+  segments = 22,
   className,
 }: {
   value: number;
@@ -31,7 +31,7 @@ export function ProgressBar({
   const filled = Math.round(share * segments);
   return (
     <div
-      className={cn("flex h-[8px] gap-[2px]", className)}
+      className={cn("flex h-[6px] gap-[3px]", className)}
       role="progressbar"
       aria-valuemin={0}
       aria-valuemax={total}

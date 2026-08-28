@@ -9,29 +9,29 @@
 /* ------------------------------------------------------------------ */
 
 :root {
-  /* substrate */
-  --bg-0: #0b0c0d;
-  --bg-1: #0e0f11;
-  --surface-1: #101214;
-  --surface-2: #16181b;
+  /* substrate: drafting-table blueprint */
+  --bg-0: #0a1a2d;
+  --bg-1: #0c1e34;
+  --surface-1: rgba(13, 32, 54, 0.88);
+  --surface-2: rgba(20, 44, 72, 0.92);
 
-  /* structure */
-  --line-1: #212427;
-  --line-2: #2e3236;
-  --line-3: #43484d;
-  --ink-line: #caccce;
+  /* structure: ruling-pen linework */
+  --line-1: rgba(168, 202, 236, 0.14);
+  --line-2: rgba(168, 202, 236, 0.24);
+  --line-3: rgba(168, 202, 236, 0.42);
+  --ink-line: #d7e6f5;
 
-  /* phosphor text */
-  --text-1: #ececea;
-  --text-2: #9a9d9f;
-  --text-3: #5e6265;
+  /* paper-white ink */
+  --text-1: #eaf3fc;
+  --text-2: #9db6cf;
+  --text-3: #64809d;
 
   /* accents */
-  --red: #ff2a2a;          /* hazard: structure, alerts, strikes */
+  --red: #ff2f2f;          /* hazard: structure, alerts, stamps */
   --red-deep: #8f1414;
-  --blue: #3d8bff;         /* police / data semantics only */
-  --blue-bright: #74acff;
-  --olive: #97a578;        /* third-faction data */
+  --blue: #6db1ff;         /* police / data semantics only */
+  --blue-bright: #9cc9ff;
+  --olive: #a3b183;        /* third-faction data */
   --term-green: #4af626;   /* reserved: live indicator ONLY */
   --gold: #d2a355;
 
@@ -87,7 +87,18 @@ html {
 }
 
 body {
-  background: var(--bg-0);
+  /* millimetre drafting grid over the blueprint field */
+  background-color: var(--bg-0);
+  background-image:
+    linear-gradient(rgba(160, 200, 255, 0.09) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(160, 200, 255, 0.09) 1px, transparent 1px),
+    linear-gradient(rgba(160, 200, 255, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(160, 200, 255, 0.045) 1px, transparent 1px);
+  background-size:
+    120px 120px,
+    120px 120px,
+    24px 24px,
+    24px 24px;
   color: var(--text-1);
   font-family: var(--font-body), system-ui, sans-serif;
   font-size: 14px;
@@ -187,12 +198,33 @@ select {
   background: var(--surface-1);
 }
 
-/* full-width structural rules */
+/* full-width structural rules — double typographic lines */
 .rule-ink {
-  border-top: 2px solid var(--ink-line);
+  border-top: 3px double var(--ink-line);
 }
 .rule-red {
   border-top: 2px solid var(--red);
+}
+
+/* inverted print stamp — the section voice of this variant */
+.stamp {
+  display: inline-block;
+  background: var(--text-1);
+  color: #12253d;
+  font-family: var(--font-mono-face), ui-monospace, monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  font-weight: 700;
+  padding: 4px 9px 5px;
+}
+.stamp--red {
+  background: var(--red);
+  color: #fff;
+}
+.stamp--outline {
+  background: transparent;
+  color: var(--text-2);
+  box-shadow: inset 0 0 0 1px var(--line-3);
 }
 
 /* hazard warning stripes */
@@ -350,16 +382,18 @@ select {
   width: 100%;
   border-collapse: collapse;
 }
-.data-table th {
+/* title-block heads: paper label strip on the drawing */
+.data-table thead th {
   font-family: var(--font-mono-face), ui-monospace, monospace;
-  font-size: 10px;
-  font-weight: 500;
-  letter-spacing: 0.09em;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: var(--text-3);
+  background: var(--text-1);
+  color: #12253d;
   text-align: left;
-  padding: 7px 10px;
-  border-bottom: 1px solid var(--line-3);
+  padding: 6px 10px;
+  border-bottom: none;
   white-space: nowrap;
 }
 .data-table td {
@@ -393,21 +427,23 @@ select {
 /* Controls                                                            */
 /* ------------------------------------------------------------------ */
 
-/* mechanical inversion on hover; press acknowledges instantly */
+/* passport double-border control; hover arms it red, press acknowledges */
 .ctrl {
   font-family: var(--font-mono-face), ui-monospace, monospace;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
-  border: 1px solid var(--line-3);
+  letter-spacing: 0.03em;
+  border: 1px solid var(--ink-line);
+  outline: 1px solid var(--line-2);
+  outline-offset: 3px;
   color: var(--text-1);
   background: transparent;
-  transition: background-color 120ms var(--ease-out), color 120ms var(--ease-out),
-    border-color 120ms var(--ease-out), transform 120ms var(--ease-out);
+  transition: color 120ms var(--ease-out), border-color 120ms var(--ease-out),
+    outline-color 120ms var(--ease-out), transform 120ms var(--ease-out);
 }
 .ctrl:hover {
-  background: var(--text-1);
-  border-color: var(--text-1);
-  color: var(--bg-0);
+  border-color: var(--red);
+  outline-color: var(--red-deep);
+  color: var(--red);
 }
 .ctrl:active {
   transform: scale(0.97);
@@ -417,9 +453,9 @@ select {
   color: var(--red);
 }
 .ctrl--red:hover {
-  background: var(--red);
-  border-color: var(--red);
-  color: #fff;
+  border-color: var(--text-1);
+  outline-color: var(--line-3);
+  color: var(--text-1);
 }
 
 .pressable {
