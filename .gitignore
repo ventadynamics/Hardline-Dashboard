@@ -45,3 +45,4 @@ next-env.d.ts
 .claude/skills/
 .claude/settings.local.json
 .codex/
+.impeccable/hook.cache.json
