@@ -48,10 +48,13 @@ export function HeaderNav({ user }: { user: HeaderUser }) {
   const [menu, setMenu] = useState<"none" | "account" | "bell">("none");
   const rootRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
+  // close menus on navigation — state adjusted during render, not in an effect
+  const [prevPath, setPrevPath] = useState(pathname);
+  if (prevPath !== pathname) {
+    setPrevPath(pathname);
     setMobileOpen(false);
     setMenu("none");
-  }, [pathname]);
+  }
 
   useEffect(() => {
     function onDown(e: MouseEvent) {

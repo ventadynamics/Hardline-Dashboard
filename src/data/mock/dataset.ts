@@ -8,7 +8,7 @@ import {
   UNITS,
   rankForLevel,
 } from "./catalog";
-import { hashCode, int, mulberry32, pick, pickWeighted, sample, shuffle, type Rng } from "@/lib/rng";
+import { hashCode, int, mulberry32, pick, pickWeighted, sample, shuffle } from "@/lib/rng";
 import type {
   Clan,
   ClanStats,
@@ -82,7 +82,6 @@ function buildDataset(): Dataset {
 
   /* ---------------- players ---------------- */
   const players: Player[] = PLAYER_NAMES.slice(0, 84).map((name, i) => {
-    const skill = 0.22 + rng() * 0.72;
     const factionId = pickWeighted(rng, FACTIONS, (f) =>
       f.id === "police" ? 4 : f.id === "syndicate" ? 3.8 : 2.2,
     ).id;
@@ -108,7 +107,7 @@ function buildDataset(): Dataset {
   /* ---------------- clans ---------------- */
   const shuffled = shuffle(rng, players);
   let cursor = 0;
-  const clans: Clan[] = CLAN_POOL.map((c, i) => {
+  const clans: Clan[] = CLAN_POOL.map((c) => {
     const size = int(rng, 4, 9);
     const memberIds = shuffled.slice(cursor, cursor + size).map((p) => p.id);
     cursor += size;
