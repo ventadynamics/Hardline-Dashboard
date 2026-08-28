@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { Search } from "lucide-react";
 
 /**
@@ -24,9 +24,13 @@ export function FilterBar({ fields }: { fields: FilterField[] }) {
   const [search, setSearch] = useState(params.get("q") ?? "");
   const debounce = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  useEffect(() => {
-    setSearch(params.get("q") ?? "");
-  }, [params]);
+  // resync the input when the URL query changes externally (render-time adjust)
+  const q = params.get("q") ?? "";
+  const [prevQ, setPrevQ] = useState(q);
+  if (prevQ !== q) {
+    setPrevQ(q);
+    setSearch(q);
+  }
 
   function apply(name: string, value: string) {
     const next = new URLSearchParams(params.toString());
