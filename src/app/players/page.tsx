@@ -3,9 +3,10 @@ import { FilterBar } from "@/components/ui/FilterBar";
 import { PageTitle } from "@/components/ui/PageTitle";
 import { Panel } from "@/components/ui/Panel";
 import { SegmentedLinks } from "@/components/ui/Segmented";
+import { NumberRise } from "@/components/fx/NumberRise";
 import { PlayerTable } from "@/features/players/PlayerTable";
 import { catalogService, playerService, sessionService } from "@/services";
-import { num } from "@/lib/format";
+
 import type { PlayerQuery } from "@/types";
 
 export const dynamic = "force-dynamic";
@@ -45,7 +46,7 @@ export default async function PlayersPage({
       <PageTitle
         title="Личный состав"
         description="Реестр бойцов Hardline - рейтинг, результативность и предпочтения. Досье каждого оперативника открывается по клику."
-        meta={<span className="tnum font-mono text-[11.5px] text-faint">{num(total)} оперативников · сезон 3</span>}
+        meta={<span className="tnum font-mono text-[11.5px] text-faint"><NumberRise value={total} duration={700} /> оперативников · сезон 3</span>}
       />
 
       {/* filter rail */}

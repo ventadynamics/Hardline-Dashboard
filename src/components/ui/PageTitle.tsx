@@ -16,7 +16,9 @@ export function PageTitle({
   return (
     <div>
       <div className="flex flex-wrap items-end justify-between gap-4">
-        <h1 className="display text-[clamp(40px,5vw,72px)] font-bold text-ink">{title}</h1>
+        <h1 className="display text-[clamp(40px,5vw,72px)] font-bold text-ink">
+          <span className="g-init">{title}</span>
+        </h1>
         {meta ? <div className="tele flex items-center gap-3 pb-2 text-[11.5px] text-dim">{meta}</div> : null}
       </div>
       {description ? (

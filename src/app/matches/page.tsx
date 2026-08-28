@@ -2,9 +2,10 @@ import type { Metadata } from "next";
 import { FilterBar } from "@/components/ui/FilterBar";
 import { PageTitle } from "@/components/ui/PageTitle";
 import { Pagination } from "@/components/ui/Pagination";
+import { NumberRise } from "@/components/fx/NumberRise";
 import { MatchList } from "@/features/matches/MatchList";
 import { catalogService, matchService } from "@/services";
-import { num } from "@/lib/format";
+
 
 export const dynamic = "force-dynamic";
 
@@ -37,7 +38,7 @@ export default async function MatchesPage({
       <PageTitle
         title="Матчи"
         description="Архив боёв за последние 30 дней. Каждый матч открывается как полная трансляция - составы, потери, хроника."
-        meta={<span className="tnum font-mono text-[11.5px] text-faint">{num(total)} матчей</span>}
+        meta={<span className="tnum font-mono text-[11.5px] text-faint"><NumberRise value={total} duration={700} /> матчей</span>}
       />
       <div className="sticky top-[60px] z-[var(--z-ticker)] -mx-4 border-b border-line2 bg-[rgba(5,7,11,0.85)] px-4 py-3 backdrop-blur-md sm:-mx-6 sm:px-6">
         <FilterBar

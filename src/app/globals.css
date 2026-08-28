@@ -523,6 +523,42 @@ select {
   animation: channel-in 240ms var(--ease-out) 1;
 }
 
+/* init tear: any text locks in through a chromatic rip on page init.
+   Lives inside .channel-in, so every navigation replays it. Stagger
+   with --gd; no data-text needed. */
+@keyframes g-init {
+  0% {
+    clip-path: inset(0 0 55% 0);
+    transform: translateX(-2px);
+    text-shadow:
+      -2px 0 var(--police),
+      2px 0 var(--hazard);
+  }
+  35% {
+    clip-path: inset(45% 0 5% 0);
+    transform: translateX(2px);
+    text-shadow:
+      2px 0 var(--police),
+      -2px 0 var(--hazard);
+  }
+  65% {
+    clip-path: inset(15% 0 35% 0);
+    transform: translateX(-1px);
+    text-shadow:
+      -1px 0 var(--police),
+      1px 0 var(--hazard);
+  }
+  100% {
+    clip-path: inset(0);
+    transform: none;
+    text-shadow: none;
+  }
+}
+.g-init {
+  display: inline-block;
+  animation: g-init 320ms steps(2, end) var(--gd, 60ms) both;
+}
+
 /* headline RGB tear when its section lands */
 .glitch-title {
   position: relative;
@@ -714,6 +750,9 @@ select {
     animation: none;
   }
   .channel-in {
+    animation: none;
+  }
+  .g-init {
     animation: none;
   }
   .reveal[data-shown="true"] .glitch-title::before,

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Avatar } from "@/components/ui/Avatar";
+import { NumberRise } from "@/components/fx/NumberRise";
 import { Reveal } from "@/components/ui/Reveal";
 import { FactionTag } from "@/components/ui/badges";
 import { MapThumb } from "@/components/ui/MapThumb";
@@ -34,7 +35,7 @@ function ButterflyRow({
   return (
     <div className="grid grid-cols-[1fr_150px_1fr] items-center gap-3 py-[7px] sm:grid-cols-[1fr_180px_1fr]">
       <div className="flex items-center justify-end gap-3">
-        <span className="tnum font-mono text-[12.5px] font-medium text-ink">{num(l)}</span>
+        <span className="tnum font-mono text-[12.5px] font-medium text-ink"><NumberRise value={l} duration={700} /></span>
         <div className="h-[14px] w-full max-w-[240px]">
           <div
             className="ml-auto h-full"
@@ -50,7 +51,7 @@ function ButterflyRow({
             style={{ width: `${(r / max) * 100}%`, background: rColor, opacity: r >= l ? 0.9 : 0.45 }}
           />
         </div>
-        <span className="tnum font-mono text-[12.5px] font-medium text-ink">{num(r)}</span>
+        <span className="tnum font-mono text-[12.5px] font-medium text-ink"><NumberRise value={r} duration={700} /></span>
       </div>
     </div>
   );
@@ -90,7 +91,7 @@ async function TeamSheet({
         </div>
         <div className="flex items-center gap-3">
           {side.won && <span className="tele text-[10.5px] font-bold text-ink">ПОБЕДИТЕЛЬ</span>}
-          <span className="display tnum text-[22px] font-bold leading-none text-ink">{side.team.score}</span>
+          <span className="display tnum text-[22px] font-bold leading-none text-ink"><NumberRise value={side.team.score} duration={700} /></span>
         </div>
       </header>
       <div className="overflow-x-auto">
@@ -245,11 +246,11 @@ export async function MatchReport({ matchId }: { matchId: string }) {
                 ПОБЕДА · {l.faction.name}
               </p>
             ) : null}
-            <p className={cn("display text-[20px] font-bold sm:text-[24px]", factionText[l.faction.colorToken])}>
+            <p className={cn("g-init display text-[20px] font-bold sm:text-[24px]", factionText[l.faction.colorToken])}>
               {l.faction.name}
             </p>
             <p className={cn("display tnum text-[clamp(72px,9vw,132px)] font-black leading-[0.85]", l.won ? "text-ink" : "text-dim")}>
-              {l.team.score}
+              <NumberRise value={l.team.score} duration={800} />
             </p>
           </div>
 
@@ -280,11 +281,11 @@ export async function MatchReport({ matchId }: { matchId: string }) {
                 ПОБЕДА · {r.faction.name}
               </p>
             ) : null}
-            <p className={cn("display text-[20px] font-bold sm:text-[24px]", factionText[r.faction.colorToken])}>
+            <p className={cn("g-init display text-[20px] font-bold sm:text-[24px]", factionText[r.faction.colorToken])}>
               {r.faction.name}
             </p>
             <p className={cn("display tnum text-[clamp(72px,9vw,132px)] font-black leading-[0.85]", r.won ? "text-ink" : "text-dim")}>
-              {r.team.score}
+              <NumberRise value={r.team.score} duration={800} />
             </p>
             {match.winner === "draw" ? <p className="tele text-[11px] font-bold text-dim">НИЧЬЯ</p> : null}
             <p className="tele mt-2 text-[10.5px] text-faint lg:hidden" translate="no">
@@ -315,13 +316,13 @@ export async function MatchReport({ matchId }: { matchId: string }) {
               </span>
               <span className="tnum ml-auto flex gap-6 font-mono text-[12px] text-dim">
                 <span>
-                  счёт <span className="font-bold text-ink">{num(mvp.score)}</span>
+                  счёт <span className="font-bold text-ink"><NumberRise value={mvp.score} duration={750} /></span>
                 </span>
                 <span>
-                  унич. <span className="font-bold text-ink">{mvp.kills}</span>
+                  унич. <span className="font-bold text-ink"><NumberRise value={mvp.kills} duration={750} /></span>
                 </span>
                 <span>
-                  точки <span className="font-bold text-ink">{num(mvp.objectiveScore)}</span>
+                  точки <span className="font-bold text-ink"><NumberRise value={mvp.objectiveScore} duration={750} /></span>
                 </span>
               </span>
             </Link>

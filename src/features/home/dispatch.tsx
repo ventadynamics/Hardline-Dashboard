@@ -20,6 +20,7 @@ import {
   sessionService,
   statsService,
 } from "@/services";
+import type { CSSProperties } from "react";
 import type { Faction, MatchSummary } from "@/types";
 
 /**
@@ -60,7 +61,7 @@ export async function Ticker() {
   return (
     <div className="relative z-[var(--z-ticker)] flex h-[28px] items-stretch overflow-hidden border-b border-line2 bg-carbon1">
       <p className="tele flex shrink-0 items-center border-r border-line2 bg-carbon0 px-3 text-[11.5px] font-medium text-ink">
-        ЭФИР № {editionNumber()} · {num(snapshot.playersOnline)} В СЕТИ
+        ЭФИР № {editionNumber()} · <NumberRise value={snapshot.playersOnline} duration={700} /> В СЕТИ
       </p>
       <div className="ticker-viewport relative flex-1 overflow-hidden" aria-hidden>
         <div className="ticker-track tele items-center gap-0 py-[5px] text-[11.5px] text-dim">
@@ -105,7 +106,7 @@ export async function HeroScorebug() {
 
             {/* left side */}
             <div className="relative flex flex-col justify-center gap-2 px-6 py-8 sm:px-10 lg:items-end lg:text-right">
-              <p className={cn("display text-[22px] font-bold sm:text-[26px]", factionText[l.faction.colorToken])}>
+              <p className={cn("g-init display text-[22px] font-bold sm:text-[26px]", factionText[l.faction.colorToken])} style={{ "--gd": "180ms" } as CSSProperties}>
                 {l.faction.name}
               </p>
               <p
@@ -115,7 +116,7 @@ export async function HeroScorebug() {
                   l.won ? "text-ink" : "text-dim",
                 )}
               >
-                {l.score}
+                <NumberRise value={l.score} duration={800} />
               </p>
               {l.won ? <p className="tele text-[11px] font-bold text-ink">ПОБЕДА</p> : null}
             </div>
@@ -140,7 +141,7 @@ export async function HeroScorebug() {
 
             {/* right side */}
             <div className="relative flex flex-col justify-center gap-2 border-t border-line px-6 py-8 sm:px-10 lg:border-t-0">
-              <p className={cn("display text-[22px] font-bold sm:text-[26px]", factionText[r.faction.colorToken])}>
+              <p className={cn("g-init display text-[22px] font-bold sm:text-[26px]", factionText[r.faction.colorToken])} style={{ "--gd": "240ms" } as CSSProperties}>
                 {r.faction.name}
               </p>
               <p
@@ -150,7 +151,7 @@ export async function HeroScorebug() {
                   r.won ? "text-ink" : "text-dim",
                 )}
               >
-                {r.score}
+                <NumberRise value={r.score} duration={800} />
               </p>
               {r.won ? <p className="tele text-[11px] font-bold text-ink">ПОБЕДА</p> : null}
               <p className="tele mt-3 text-[10.5px] text-faint lg:hidden" translate="no">
@@ -205,7 +206,7 @@ export async function MiniScorebugs() {
             <div className="flex items-baseline justify-between gap-3">
               <p className="tnum font-mono text-[13px] font-bold text-ink">
                 <span className={factionTextHi[l.faction.colorToken]}>{l.faction.code}</span>
-                <span className="mx-2">{l.score}:{r.score}</span>
+                <span className="mx-2"><NumberRise value={l.score} duration={650} />:<NumberRise value={r.score} duration={650} /></span>
                 <span className={factionTextHi[r.faction.colorToken]}>{r.faction.code}</span>
               </p>
               <p className="tech-label" translate="no">
@@ -273,15 +274,15 @@ export async function OperatorRail() {
           <div className="tnum grid grid-cols-3 border-t border-line">
             <div className="border-r border-line px-5 py-3">
               <p className="tech-label">Победы</p>
-              <p className="mt-1 font-mono text-[14px] font-bold text-ink">{pct(stats.winRate, 1)}</p>
+              <p className="mt-1 font-mono text-[14px] font-bold text-ink"><NumberRise value={stats.winRate * 100} decimals={1} suffix="%" /></p>
             </div>
             <div className="border-r border-line px-5 py-3">
               <p className="tech-label">К-Д</p>
-              <p className="mt-1 font-mono text-[14px] font-bold text-ink">{stats.kd.toFixed(2)}</p>
+              <p className="mt-1 font-mono text-[14px] font-bold text-ink"><NumberRise value={stats.kd} decimals={2} /></p>
             </div>
             <div className="px-5 py-3">
               <p className="tech-label">Матчи</p>
-              <p className="mt-1 font-mono text-[14px] font-bold text-ink">{num(stats.matches)}</p>
+              <p className="mt-1 font-mono text-[14px] font-bold text-ink"><NumberRise value={stats.matches} /></p>
             </div>
           </div>
           <div className="border-t border-line p-3">
@@ -326,7 +327,9 @@ export async function OperatorRail() {
                         {t.title}
                       </p>
                       <p className="tnum font-mono text-[11.5px]">
-                        <span className={isDone ? "text-dim" : "text-ink"}>{t.progress}</span>
+                        <span className={isDone ? "text-dim" : "text-ink"}>
+                          <NumberRise value={t.progress} duration={700} />
+                        </span>
                         <span className="text-faint">/{t.total}</span>
                       </p>
                     </div>
@@ -388,7 +391,7 @@ export async function PodiumStrip() {
           {e.player.username}
         </p>
         <p className={cn("display tnum mt-2 font-bold", big ? "text-[32px] text-ink" : "text-[22px] text-dim")}>
-          {num(e.player.rating)}
+          <NumberRise value={e.player.rating} />
         </p>
         <p className="tnum mt-1 font-mono text-[10.5px] text-faint">
           {pct(e.stats.winRate, 1)} побед · {num(e.stats.matches)} матчей
@@ -430,7 +433,7 @@ export async function PodiumStrip() {
                   <span className={cn("tele hidden text-[10px] font-bold sm:inline", factionTextHi[f.colorToken])}>
                     {f.code}
                   </span>
-                  <span className="tnum font-mono text-[12.5px] font-bold text-ink">{num(e.player.rating)}</span>
+                  <span className="tnum font-mono text-[12.5px] font-bold text-ink"><NumberRise value={e.player.rating} duration={750} /></span>
                 </Link>
               </li>
             );
@@ -504,8 +507,8 @@ export async function MapOfWeek() {
               </Link>
             </div>
             <p className="tnum text-right font-mono text-[11.5px] leading-relaxed text-dim">
-              {num(s.matches)} матчей · ~{durationShort(s.avgDurationSec)}
-              <br />в среднем {num(s.avgPlayers)} бойцов
+              <NumberRise value={s.matches} /> матчей · ~{durationShort(s.avgDurationSec)}
+              <br />в среднем <NumberRise value={s.avgPlayers} duration={700} /> бойцов
             </p>
           </div>
         </div>

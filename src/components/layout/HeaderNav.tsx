@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { Bell, ChevronDown, LogOut, Menu, Settings, UserRound, X } from "lucide-react";
 import { Avatar } from "@/components/ui/Avatar";
 import { ServerClock } from "@/components/live/ServerClock";
@@ -55,7 +55,7 @@ const NAV: { href: string; label: string }[] = [
 function Wordmark() {
   return (
     <Link href="/" aria-label="HARDLINE - на главную" className="shrink-0">
-      <span className="wordmark-plate display text-[18px] font-black leading-none">HARDLINE</span>
+      <span className="wordmark-plate g-init display text-[18px] font-black leading-none">HARDLINE</span>
     </Link>
   );
 }
@@ -96,7 +96,7 @@ export function HeaderNav({ user }: { user: HeaderUser }) {
         <Wordmark />
 
         <nav className="hidden flex-1 items-stretch self-stretch xl:flex" aria-label="Основная навигация">
-          {NAV.map((item) => {
+          {NAV.map((item, i) => {
             const active = isActive(item.href);
             return (
               <Link
@@ -108,7 +108,9 @@ export function HeaderNav({ user }: { user: HeaderUser }) {
                   active ? "text-ink" : "text-dim hover:text-ink",
                 )}
               >
-                {item.label}
+                <span className="g-init" style={{ "--gd": `${80 + i * 45}ms` } as CSSProperties}>
+                  {item.label}
+                </span>
               </Link>
             );
           })}

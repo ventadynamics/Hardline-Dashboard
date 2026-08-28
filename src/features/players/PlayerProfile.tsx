@@ -12,7 +12,7 @@ import { EmptyState } from "@/components/ui/states";
 import { MatchList } from "@/features/matches/MatchList";
 import { cn } from "@/lib/cn";
 import { factionRail, fieldFor } from "@/lib/factions";
-import { kd as fmtKd, num, pct, shortDate } from "@/lib/format";
+import { num, pct, shortDate } from "@/lib/format";
 import { catalogService, clanService, playerService } from "@/services";
 import type { SliceStat } from "@/types";
 
@@ -114,7 +114,7 @@ export async function PlayerProfile({
           <div className="min-w-0">
             <div className="flex flex-wrap items-baseline gap-3">
               <h1 className="display text-[clamp(40px,5vw,72px)] font-bold text-ink" translate="no">
-                {player.username}
+                <span className="g-init">{player.username}</span>
               </h1>
               {clanEntry ? (
                 <Link
@@ -157,7 +157,7 @@ export async function PlayerProfile({
             <p className="tnum mt-2 font-mono text-[11.5px] text-dim">
               {rank ? `#${rank} в зачёте` : "вне зачёта"}
               <span className={cn("ml-3", delta >= 0 ? "text-[color:var(--police-hi)]" : "text-[color:var(--hazard-hi)]")}>
-                {delta >= 0 ? "▲" : "▼"} {num(Math.abs(delta))} за 30 дней
+                {delta >= 0 ? "▲" : "▼"} <NumberRise value={Math.abs(delta)} duration={750} /> за 30 дней
               </span>
             </p>
           </div>
@@ -172,21 +172,21 @@ export async function PlayerProfile({
             <div className="plate grid grid-cols-3">
               <div className="border-r border-line px-5 py-4">
                 <p className="tech-label">Победы</p>
-                <p className="display tnum mt-1.5 text-[32px] font-bold text-ink">{pct(stats.winRate, 1)}</p>
+                <p className="display tnum mt-1.5 text-[32px] font-bold text-ink"><NumberRise value={stats.winRate * 100} decimals={1} suffix="%" /></p>
                 <p className="tnum mt-1 font-mono text-[10.5px] text-faint">
                   {num(stats.wins)} - {num(stats.losses)}
                 </p>
               </div>
               <div className="border-r border-line px-5 py-4">
                 <p className="tech-label">К-Д</p>
-                <p className="display tnum mt-1.5 text-[32px] font-bold text-ink">{fmtKd(stats.kd)}</p>
+                <p className="display tnum mt-1.5 text-[32px] font-bold text-ink"><NumberRise value={stats.kd} decimals={2} /></p>
                 <p className="tnum mt-1 font-mono text-[10.5px] text-faint">
                   {num(stats.kills)} / {num(stats.deaths)}
                 </p>
               </div>
               <div className="px-5 py-4">
                 <p className="tech-label">Матчи</p>
-                <p className="display tnum mt-1.5 text-[32px] font-bold text-ink">{num(stats.matches)}</p>
+                <p className="display tnum mt-1.5 text-[32px] font-bold text-ink"><NumberRise value={stats.matches} /></p>
                 <p className="tnum mt-1 font-mono text-[10.5px] text-faint">ср. очки {num(stats.avgScore)}</p>
               </div>
             </div>
