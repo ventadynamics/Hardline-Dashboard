@@ -23,8 +23,8 @@ export function RailModule({
   flush?: boolean;
 }) {
   return (
-    <section className="frame" aria-label={title}>
-      <header className="flex items-center justify-between gap-3 border-b border-line2 bg-raised px-3.5 py-2">
+    <section className="aug" data-augmented-ui="tr-clip bl-clip border" aria-label={title}>
+      <header className="flex items-center justify-between gap-3 border-b border-line px-3.5 py-2.5">
         <h2 className="tele text-[11.5px] font-bold text-ink">{title}</h2>
         {meta}
       </header>
@@ -89,7 +89,8 @@ export async function RecentMatchesBlock() {
           </Link>
         }
       />
-      <div className="frame">
+      {/* open ledger — data lines on the substrate, no housing */}
+      <div className="border-t border-line2">
         <MatchList
           matches={matches}
           showPerspective

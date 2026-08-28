@@ -55,7 +55,7 @@ export async function LeftConsole() {
 
         {/* operator card */}
         {stats ? (
-          <div data-fx className="frame">
+          <div data-fx className="aug aug--accent" data-augmented-ui="tl-clip tr-clip-x br-clip border">
             <div className="flex items-center gap-3 border-b border-line px-4 py-3">
               <Avatar seed={p.id} tone="blue" size={40} />
               <div className="min-w-0">
@@ -110,8 +110,8 @@ export async function LeftConsole() {
         ) : null}
 
         {/* live telemetry stack */}
-        <div data-fx className="frame">
-          <header className="flex items-center justify-between border-b border-line2 bg-raised px-4 py-2">
+        <div data-fx className="aug" data-augmented-ui="tr-clip bl-clip border">
+          <header className="flex items-center justify-between border-b border-line px-4 py-2.5">
             <h2 className="tele text-[11px] font-bold text-ink">Телеметрия</h2>
             <Link href="/matches" className="tele text-[9.5px] text-faint transition-colors hover:text-ink">
               матчи
@@ -124,7 +124,8 @@ export async function LeftConsole() {
         <div data-fx>
           <a
             href="#"
-            className="ctrl pressable flex items-center justify-between px-4 py-[10px] text-[11px] font-medium"
+            data-augmented-ui="tl-clip br-clip border"
+            className="aug-btn flex items-center justify-between px-4 py-[10px] text-[11px] font-medium"
           >
             Discord сообщества
             <ArrowRight size={12} />
@@ -155,7 +156,7 @@ export async function GameSummaryBlock() {
           </Link>
         }
       />
-      <div className="frame p-4">
+      <div className="aug p-4" data-augmented-ui="tl-clip br-clip border">
         <p className="tech-label mb-1">Победы фракций</p>
         {global.factionWinRates.map((f) => {
           const fac = factions.find((x) => x.id === f.factionId)!;
@@ -221,7 +222,7 @@ export async function MapOfPeriodBlock() {
           </Link>
         }
       />
-      <Link href={`/maps/${topMap.id}`} className="frame group block">
+      <Link href={`/maps/${topMap.id}`} className="aug group block" data-augmented-ui="tr-clip bl-clip border">
         <MapThumb map={topMap} className="h-[168px] w-full opacity-90 transition-opacity duration-300 group-hover:opacity-100" />
         <div className="flex items-end justify-between gap-3 border-t border-line2 px-3.5 py-3">
           <div>

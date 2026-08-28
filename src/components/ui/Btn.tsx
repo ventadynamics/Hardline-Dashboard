@@ -3,13 +3,12 @@ import { cn } from "@/lib/cn";
 import type { ReactNode } from "react";
 
 const variants = {
-  /* mechanical inversion: phosphor fill on hover */
-  primary: "ctrl",
-  danger: "ctrl ctrl--red",
-  ghost: "ctrl !border-line2 !text-dim hover:!border-line3",
+  primary: "aug-btn",
+  danger: "aug-btn aug-btn--red",
+  ghost: "aug-btn !text-dim hover:!text-bg0",
 } as const;
 
-/** Rectangular mono control. Hover inverts, press acknowledges. */
+/** Augmented control: clipped corners, mechanical inversion on hover. */
 export function Btn({
   href,
   children,
@@ -24,8 +23,9 @@ export function Btn({
   return (
     <Link
       href={href}
+      data-augmented-ui="tl-clip br-clip border"
       className={cn(
-        "pressable inline-flex items-center gap-2 px-4 py-[9px] text-[11.5px] font-medium",
+        "inline-flex items-center gap-2 px-4 py-[9px] text-[11.5px] font-medium",
         variants[variant],
         className,
       )}

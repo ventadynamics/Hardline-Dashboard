@@ -51,7 +51,7 @@ export async function OperationBlock() {
           </>
         }
       />
-      <div className="frame">
+      <div className="border-t border-line2">
         <div>
           {op.tasks.map((t, i) => {
           const share = t.total === 0 ? 0 : Math.min(1, t.progress / t.total);

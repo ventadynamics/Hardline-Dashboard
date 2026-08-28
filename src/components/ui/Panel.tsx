@@ -1,7 +1,7 @@
 import { cn } from "@/lib/cn";
 import type { ReactNode } from "react";
 
-/** Framed compartment: solid substrate, visible 1px boundary, 90-degree. */
+/** Augmented housing: asymmetric machined cuts, 1px boundary. */
 export function Panel({
   children,
   className,
@@ -13,5 +13,12 @@ export function Panel({
   corners?: boolean;
   padded?: boolean;
 }) {
-  return <div className={cn("frame", padded && "p-4", className)}>{children}</div>;
+  return (
+    <div
+      className={cn("aug", padded && "p-4", className)}
+      data-augmented-ui="tl-clip br-clip border"
+    >
+      {children}
+    </div>
+  );
 }

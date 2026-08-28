@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "augmented-ui/augmented-ui.min.css";
 
 /* ------------------------------------------------------------------ */
 /* HARDLINE — Tactical Telemetry design system.                        */
@@ -170,10 +171,84 @@ select {
 /* Structure: compartments, rules, frames                              */
 /* ------------------------------------------------------------------ */
 
-/* framed compartment */
+/* framed compartment (legacy fallback) */
 .frame {
   background: var(--surface-1);
   border: 1px solid var(--line-2);
+}
+
+/* augmented housing: asymmetric machined cuts via augmented-ui */
+.aug {
+  background: var(--surface-1);
+  --aug-border-all: 1px;
+  --aug-border-bg: var(--line-2);
+  --aug-tl: 12px;
+  --aug-tr: 8px;
+  --aug-br: 12px;
+  --aug-bl: 8px;
+}
+.aug--accent {
+  --aug-border-bg: linear-gradient(180deg, var(--line-3), var(--line-2) 40%);
+}
+
+/* augmented control */
+.aug-btn {
+  --aug-border-all: 1px;
+  --aug-border-bg: var(--line-3);
+  --aug-tl: 8px;
+  --aug-br: 8px;
+  background: transparent;
+  font-family: var(--font-mono-face), ui-monospace, monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--text-1);
+  transition: background-color 120ms var(--ease-out), color 120ms var(--ease-out),
+    transform 120ms var(--ease-out);
+}
+.aug-btn:hover {
+  --aug-border-bg: var(--text-1);
+  background: var(--text-1);
+  color: var(--bg-0);
+}
+.aug-btn:active {
+  transform: scale(0.97);
+}
+.aug-btn--red {
+  --aug-border-bg: var(--red);
+  color: var(--red);
+}
+.aug-btn--red:hover {
+  --aug-border-bg: var(--red);
+  background: var(--red);
+  color: #fff;
+}
+
+/* callout header: title, projection line, terminator */
+.callout {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.callout-line {
+  position: relative;
+  height: 1px;
+  flex: 1;
+  background: var(--line-3);
+}
+.callout-line::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: -2.5px;
+  width: 6px;
+  height: 6px;
+  background: var(--ink-line);
+}
+.callout-line--red {
+  background: var(--red-deep);
+}
+.callout-line--red::after {
+  background: var(--red);
 }
 
 /* mathematically perfect dividing lines: grid gap over contrast bg */

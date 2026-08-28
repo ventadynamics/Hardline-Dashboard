@@ -2,8 +2,8 @@ import { cn } from "@/lib/cn";
 import type { ReactNode } from "react";
 
 /**
- * Operational unit header: a full-width structural rule, then ASCII-framed
- * mono title with meta hanging right on the same line.
+ * Callout header: the title projects a survey line ending in a terminator
+ * square; meta rides past the line. No box, no rule stack.
  */
 export function SectionHeader({
   title,
@@ -17,16 +17,13 @@ export function SectionHeader({
   className?: string;
 }) {
   return (
-    <div className={cn("mb-3", className)}>
-      <div className={accent === "red" ? "rule-red" : "rule-ink"} aria-hidden />
-      <div className="mt-2 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-        <h2 className="tele text-[13px] font-bold text-ink">
-          <span aria-hidden className="text-faint">[ </span>
-          {title}
-          <span aria-hidden className="text-faint"> ]</span>
-        </h2>
-        {meta ? <div className="tele flex items-center gap-3 text-[10.5px] text-dim">{meta}</div> : null}
-      </div>
+    <div className={cn("callout mb-3.5", className)}>
+      <h2 className="tele shrink-0 text-[13px] font-bold text-ink">
+        {accent === "red" ? <span aria-hidden className="mr-2.5 inline-block h-[9px] w-[9px] bg-red align-baseline" /> : null}
+        {title}
+      </h2>
+      <span className={cn("callout-line", accent === "red" && "callout-line--red")} aria-hidden />
+      {meta ? <div className="tele flex shrink-0 items-center gap-3 text-[10px] text-dim">{meta}</div> : null}
     </div>
   );
 }
