@@ -56,7 +56,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         </noscript>
         <div className="grain-overlay" aria-hidden />
         <SiteHeader />
-        <main className="flex-1">{children}</main>
+        <main className="container-lines flex-1">{children}</main>
         <SiteFooter />
       </body>
     </html>

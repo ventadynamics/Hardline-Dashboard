@@ -16,7 +16,15 @@ export function TableSkeleton({ rows = 8 }: { rows?: number }) {
   );
 }
 
-export function EmptyState({ title, hint }: { title: string; hint?: string }) {
+export function EmptyState({
+  title,
+  hint,
+  action,
+}: {
+  title: string;
+  hint?: string;
+  action?: React.ReactNode;
+}) {
   return (
     <div className="border border-line2 px-6 py-10 text-center">
       <p className="tele text-[12px] font-bold text-dim">
@@ -24,7 +32,8 @@ export function EmptyState({ title, hint }: { title: string; hint?: string }) {
         {title}
         <span aria-hidden className="text-faint"> ]</span>
       </p>
-      {hint ? <p className="mt-2 text-[12.5px] text-faint">{hint}</p> : null}
+      {hint ? <p className="mt-2 text-pretty text-[12.5px] text-faint">{hint}</p> : null}
+      {action ? <div className="mt-4 flex justify-center">{action}</div> : null}
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Countdown } from "@/components/live/Countdown";
+import { Btn } from "@/components/ui/Btn";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { EmptyState } from "@/components/ui/states";
 import { cn } from "@/lib/cn";
@@ -18,6 +19,7 @@ export async function OperationBlock() {
         <EmptyState
           title="Вы не состоите в клане"
           hint="Вступите в клан, чтобы получать ежедневные задачи операции."
+          action={<Btn href="/clans" variant="primary">НАЙТИ КЛАН</Btn>}
         />
       </section>
     );

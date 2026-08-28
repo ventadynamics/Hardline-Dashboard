@@ -223,6 +223,42 @@ select {
   color: #fff;
 }
 
+/* survey guides — ui-skills.com mengto/container-lines, adapted to tokens:
+   vertical container-edge lines + mini corner squares at section pins */
+.container-lines {
+  position: relative;
+}
+.container-lines::before,
+.container-lines::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: rgba(158, 178, 208, 0.09);
+  pointer-events: none;
+}
+.container-lines::before {
+  left: max(10px, calc((100% - 1400px) / 2));
+}
+.container-lines::after {
+  right: max(10px, calc((100% - 1400px) / 2));
+}
+.corner-squares {
+  position: relative;
+}
+.corner-squares > .corner {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  background: var(--line-3);
+  pointer-events: none;
+}
+.corner.tl { top: 0; left: 0; transform: translate(-50%, -50%); }
+.corner.tr { top: 0; right: 0; transform: translate(50%, -50%); }
+.corner.bl { bottom: 0; left: 0; transform: translate(-50%, 50%); }
+.corner.br { bottom: 0; right: 0; transform: translate(50%, 50%); }
+
 /* callout header: title, projection line, terminator */
 .callout {
   display: flex;

@@ -13,7 +13,11 @@ export const dynamic = "force-dynamic";
  */
 export default function HomePage() {
   return (
-    <div className="mx-auto max-w-[1400px] px-4 py-7 sm:px-6">
+    <div className="corner-squares mx-auto max-w-[1400px] px-4 py-7 sm:px-6">
+      <span className="corner tl" aria-hidden />
+      <span className="corner tr" aria-hidden />
+      <span className="corner bl" aria-hidden />
+      <span className="corner br" aria-hidden />
       <div className="grid grid-cols-1 gap-x-10 gap-y-10 lg:grid-cols-[330px_minmax(0,1fr)]">
         <aside aria-label="Командная колонна">
           <Suspense fallback={<Skeleton className="h-[520px] w-full" />}>

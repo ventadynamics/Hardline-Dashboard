@@ -45,7 +45,7 @@ export async function LeftConsole() {
         {/* console head */}
         <div data-fx>
           <div className="rule-red" aria-hidden />
-          <h1 className="display mt-3 text-[30px] font-black leading-[0.95] text-ink">
+          <h1 className="display mt-3 text-balance text-[30px] font-black leading-[0.95] tracking-[-0.015em] text-ink">
             ОПЕРАТИВНАЯ
             <br />
             СВОДКА
